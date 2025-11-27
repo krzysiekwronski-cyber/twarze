@@ -1,12 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="pl">
 <head>
-    <title>Moja Galeria</title>
-    <style>/* ten sam kod galerii co wcześniej */</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twarze 1430-1450 - Pełny Ekran</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:Arial,sans-serif;background:#000;color:#fff;overflow:hidden;}
+        .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:15px;padding:20px;max-width:1400px;margin:0 auto;}
+        .thumbnail{cursor:pointer;border-radius:8px;overflow:hidden;box-shadow:0 4px 12px rgba(255,255,255,0.1);transition:transform 0.3s;}
+        .thumbnail:hover{transform:scale(1.05);}
+        .thumbnail img{width:100%;height:200px;object-fit:cover;}
+        .caption{padding:10px;background:rgba(0,0,0,0.8);font-size:0.9em;}
+        .fullscreen{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.98);z-index:1000;display:flex;align-items:center;justify-content:center;}
+        .fullscreen img{max-width:95vw;max-height:95vh;object-fit:contain;box-shadow:0 0 50px rgba(255,255,255,0.3);}
+        .nav-arrow{position:fixed;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.2);border:none;color:#fff;font-size:3em;width:60px;height:60px;border-radius:50%;cursor:pointer;}
+        .nav-left{left:20px;}.nav-right{right:20px;}
+        .close-btn{position:fixed;top:20px;right:20px;background:rgba(255,0,0,0.7);border:none;color:#fff;width:50px;height:50px;border-radius:50%;font-size:1.5em;cursor:pointer;}
+        .counter{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.7);padding:10px 20px;border-radius:20px;}
+    </style>
 </head>
 <body>
-    <div class="gallery-grid">
-        <!-- Automatycznie znajdzie wszystkie .jpg .png w folderze -->
+    <div class="gallery-grid" id="gallery"></div>
+    <div class="fullscreen" id="fullscreen" style="display:none;">
+        <img id="fullscreenImg" src="" alt="">
+        <button class="nav-arrow nav-left" onclick="changeSlide(-1)">‹</button>
+        <button class="nav-arrow nav-right" onclick="changeSlide(1)">›</button>
+        <button class="close-btn" onclick="closeFullscreen()">×</button>
+        <div class="counter" id="counter"></div>
     </div>
+
+    <script>
+        // Automatycznie znajdzie wszystkie JPG/PNG w folderze
+        fetch('').then(r=>r.text()).then(()=> {
+            const images = Array.from(document.images).filter(img=>img.src.match(/\.(jpg|jpeg|png|webp)$/i));
+            const photos = images.map(img=>({url:img.src,caption:img.alt||img.src.split('/').pop()}));
+            
+            let currentSlide=0;
+            document.getElementById('gallery').innerHTML=photos.map((photo,i)=>`
+                <div class="thumbnail" onclick="openFullscreen(${i})">
+                    <img src="${photo.url}" alt="${photo.caption}">
+                    <div class="caption">${photo.caption}</div>
+                </div>`).join('');
+            
+            window.openFullscreen=(i)=>{currentSlide=i;showSlide();document.getElementById('fullscreen').style.display='flex';}
+            window.closeFullscreen=()=>{document.getElementById('fullscreen').style.display='none';}
+            window.showSlide=()=>{
+                document.getElementById('fullscreenImg').src=photos[currentSlide].url;
+                document.getElementById('counter').textContent=`${currentSlide+1}/${photos.length}`;
+            }
+            window.changeSlide=d=> {currentSlide=(currentSlide+d+photos.length)%photos.length;showSlide();}
+        });
+    </script>
 </body>
 </html>
