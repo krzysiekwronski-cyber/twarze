@@ -1,90 +1,347 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Twarze 1430–1450</title>
-    <style>
-        *{margin:0;padding:0;box-sizing:border-box;}
-        body{font-family:Arial,sans-serif;background:#000;color:#fff;}
-        h1{text-align:center;padding:30px;font-size:2em;}
-        .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;padding:30px;max-width:1600px;margin:0 auto;}
-        .photo{position:relative;cursor:pointer;border-radius:12px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.7);transition:all 0.3s;}
-        .photo:hover{transform:scale(1.03);box-shadow:0 18px 40px rgba(0,0,0,0.9);}
-        .photo img{width:100%;height:360px;object-fit:cover;display:block;}
-        .caption{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.9));padding:12px 14px;font-size:0.95em;}
-        .fullscreen{position:fixed;inset:0;background:rgba(0,0,0,0.95);display:none;align-items:center;justify-content:center;z-index:1000;}
-        .fullscreen img{max-width:95vw;max-height:95vh;object-fit:contain;box-shadow:0 0 50px rgba(0,0,0,1);}
-        .nav{position:fixed;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.6);border:none;color:#fff;font-size:3rem;width:60px;height:60px;border-radius:50%;cursor:pointer;}
-        .nav.left{left:20px;}
-        .nav.right{right:20px;}
-        .close{position:fixed;top:20px;right:20px;background:rgba(0,0,0,0.8);border:none;color:#fff;font-size:2rem;width:50px;height:50px;border-radius:50%;cursor:pointer;}
-        .counter{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.7);padding:8px 18px;border-radius:20px;font-size:0.9rem;}
-    </style>
+  <meta charset="UTF-8" />
+  <title>Twarze – galeria portretów</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #111;
+      color: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #333;
+      background: #000;
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      margin-bottom: 0.25rem;
+    }
+
+    header p {
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    main {
+      padding: 1rem;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      flex: 1;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+
+    .thumb {
+      background: #181818;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid #2b2b2b;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .thumb:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+      border-color: #555;
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      background: #000;
+    }
+
+    .thumb-caption {
+      padding: 0.5rem 0.6rem 0.6rem;
+      font-size: 0.8rem;
+      color: #ddd;
+      border-top: 1px solid #222;
+      word-break: break-word;
+    }
+
+    /* Lightbox */
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: none; /* pokażemy JS-em */
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .lightbox.visible {
+      display: flex;
+    }
+
+    .lightbox-inner {
+      position: relative;
+      max-width: 95vw;
+      max-height: 95vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .lightbox img {
+      max-width: 95vw;
+      max-height: 80vh;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.9);
+      background: #000;
+    }
+
+    .lightbox-caption {
+      font-size: 0.9rem;
+      color: #eee;
+      text-align: center;
+      max-width: 80vw;
+      word-break: break-word;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -40px;
+      right: -4px;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: #fff;
+      padding: 0.2rem 0.4rem;
+      line-height: 1;
+      background: transparent;
+      border: none;
+    }
+
+    .lightbox-close:hover {
+      color: #ffdddd;
+    }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      font-size: 2rem;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid #555;
+      user-select: none;
+    }
+
+    .lightbox-nav:hover {
+      background: rgba(0,0,0,0.7);
+    }
+
+    .lightbox-prev {
+      left: -60px;
+    }
+
+    .lightbox-next {
+      right: -60px;
+    }
+
+    @media (max-width: 768px) {
+      .thumb img {
+        height: 180px;
+      }
+      .lightbox-prev {
+        left: 5px;
+      }
+      .lightbox-next {
+        right: 5px;
+      }
+      .lightbox-close {
+        top: -35px;
+        right: 0;
+      }
+    }
+
+    footer {
+      padding: 0.7rem 1.5rem 1rem;
+      font-size: 0.75rem;
+      color: #777;
+      border-top: 1px solid #222;
+      background: #000;
+      text-align: right;
+    }
+  </style>
 </head>
 <body>
-    <h1>Twarze 1430–1450</h1>
+  <header>
+    <h1>Popatrz im w oczy</h1>
+    <p>Portrety prawdziwych ludzi ok. 1430–1450 – galeria z Twojego repozytorium GitHub.</p>
+  </header>
 
-    <div class="gallery" id="gallery">
-        <div class="photo"><img src="Wlochy-1476-AdMessina.jpg" alt=""><div class="caption">Włochy 1476 – Antonello da Messina</div></div>
-        <div class="photo"><img src="Kartuz-1445-PCHristus.jpg" alt=""><div class="caption">Kartuz 1445 – Petrus Christus</div></div>
-        <div class="photo"><img src="Pan-w-chaperonie-1433-VEyck.jpg" alt=""><div class="caption">Pan w chaperonie 1433 – Jan van Eyck</div></div>
-        <div class="photo"><img src="Pisanello_-_Filippo-Maria-ostatni-ksiaze-Visconti-zm-1447.jpg" alt=""><div class="caption">Filippo Maria Visconti – Pisanello</div></div>
-        <div class="photo"><img src="Pan-w-niebieskim-chaperonie-1430-vEyck.jpg" alt=""><div class="caption">Pan w niebieskim chaperonie 1430 – Jan van Eyck</div></div>
-        <div class="photo"><img src="pan-Baudouin-de-Lannoy-1439-vEyck.jpg" alt=""><div class="caption">Baudouin de Lannoy 1439 – Jan van Eyck</div></div>
-        <div class="photo"><img src="kanclerz-Rolin-ur-1376-vEyck-1435.jpg" alt=""><div class="caption">Kanclerz Rolin 1435 – Jan van Eyck</div></div>
-        <div class="photo"><img src="Edward_Grimston-1446-PChristus.jpg" alt=""><div class="caption">Edward Grimston 1446 – Petrus Christus</div></div>
-        <div class="photo"><img src="Giuliano-Giamberti-da-Sangallo-1485-Piero-di-Cosimo.jpg" alt=""><div class="caption">Giuliano da Sangallo 1485 – Piero di Cosimo</div></div>
-        <div class="photo"><img src="Pan-jan_de_leeuw-1436-vEyck.jpg" alt=""><div class="caption">Jan de Leeuw 1436 – Jan van Eyck</div></div>
-        <div class="photo"><img src="Philippe-de-Croya-Rogier-van-der-Weydena-1450-1460.jpg" alt=""><div class="caption">Philippe de Croya 1450–1460 – Rogier van der Weyden</div></div>
-        <div class="photo"><img src="Jan-v-Eyck-portret-m-ok-1430.jpg" alt=""><div class="caption">Portret mężczyzny ok. 1430 – Jan van Eyck</div></div>
-        <div class="photo"><img src="dziadek-1490-Ghirlandaio.jpg" alt=""><div class="caption">Dziadek z wnukiem 1490 – Ghirlandaio</div></div>
-        <div class="photo"><img src="kanonik-van-der-Paele-1436-vEyck.jpg" alt=""><div class="caption">Kanonik van der Paele 1436 – Jan van Eyck</div></div>
-        <div class="photo"><img src="Francesco_Sforza-1460.jpg" alt=""><div class="caption">Francesco Sforza 1460</div></div>
-        <div class="photo"><img src="Pan-Wlochy-ok-1475-AdMessina.jpg" alt=""><div class="caption">Portret mężczyzny Włochy ok. 1475 – Antonello da Messina</div></div>
-        <div class="photo"><img src="Autoportret-w-chaperonie-1432-vEyck.jpg" alt=""><div class="caption">Autoportret w chaperonie 1432 – Jan van Eyck</div></div>
-        <div class="photo"><img src="poprzednie-pokolenie-Jan-Bez-Trwogi-1405.jpg" alt=""><div class="caption">Jan bez Trwogi ok. 1405</div></div>
+  <main>
+    <div id="gallery" class="gallery"></div>
+  </main>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" class="lightbox" aria-hidden="true">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" aria-label="Zamknij">&times;</button>
+      <div class="lightbox-nav lightbox-prev" aria-label="Poprzednie zdjęcie">&#10094;</div>
+      <img id="lightbox-image" src="" alt="" />
+      <div class="lightbox-nav lightbox-next" aria-label="Następne zdjęcie">&#10095;</div>
+      <div id="lightbox-caption" class="lightbox-caption"></div>
     </div>
+  </div>
 
-    <div class="fullscreen" id="full">
-        <button class="close" onclick="hideFull()">×</button>
-        <button class="nav left" onclick="change(-1)">‹</button>
-        <img id="fullImg" src="">
-        <button class="nav right" onclick="change(1)">›</button>
-        <div class="counter" id="count"></div>
-    </div>
+  <footer>
+    Sterowanie: kliknij miniaturę, aby powiększyć. Użyj strzałek (ikonek) lub klawiszy klawiatury ← →, Esc żeby wyjść.
+  </footer>
 
-    <script>
-        const thumbs = Array.from(document.querySelectorAll('.photo img'));
-        const full = document.getElementById('full');
-        const fullImg = document.getElementById('fullImg');
-        const counter = document.getElementById('count');
-        let idx = 0;
+  <script>
+    // Lista obrazów z Twojego repo (pliki w tym samym katalogu co index.html)
+    const images = [
+      "Autoportret w chaperonie 1432 vEyck.jpg",
+      "Edward_Grimston 1446 PChristus.jpg",
+      "Francesco_Sforza 1460.jpg",
+      "Giuliano Giamberti da Sangallo 1485 Piero di Cosimo.jpg",
+      "Jan v Eyck portret m ok 1430.jpg",
+      "Kartuz 1445 PCHristus.jpg",
+      "Pan Włochy ok 1475 AdMessina.jpg",
+      "Pan jan_de_leeuw 1436 vEyck.jpg",
+      "Pan w chaperonie 1433 VEyck.jpg",
+      "Pan w niebieskim chaperonie 1430 vEyck.jpg",
+      "Philippe de Croÿa Rogier van der Weydena 1450–1460..jpg",
+      "Pisanello_-_Filippo Maria ostatni książę Visconti zm 1447.jpg",
+      "Włochy 1476 AdMessina.jpg",
+      "dziadek 1490 Ghirlandaio.jpg",
+      "kanclerz Rolin ur 1376 vEyck 1435.jpg",
+      "kanonik van der Paele 1436 vEyck.jpg",
+      "pan Baudouin de Lannoy 1439 vEyck.jpg",
+      "poprzednie pokolenie Jan Bez Trwogi 1405.jpg"
+    ];
 
-        thumbs.forEach((img,i)=>{
-            img.addEventListener('click',()=>{
-                idx = i;
-                show();
-            });
+    const galleryEl = document.getElementById("gallery");
+    const lightboxEl = document.getElementById("lightbox");
+    const lightboxImageEl = document.getElementById("lightbox-image");
+    const lightboxCaptionEl = document.getElementById("lightbox-caption");
+
+    const btnClose = document.querySelector(".lightbox-close");
+    const btnPrev = document.querySelector(".lightbox-prev");
+    const btnNext = document.querySelector(".lightbox-next");
+
+    let currentIndex = 0;
+
+    function buildGallery() {
+      images.forEach((fileName, index) => {
+        const thumb = document.createElement("div");
+        thumb.className = "thumb";
+        thumb.dataset.index = index;
+
+        const img = document.createElement("img");
+        // encodeURI zabezpiecza spacje i polskie znaki w URL-ach
+        img.src = encodeURI(fileName);
+        img.alt = fileName;
+        img.loading = "lazy";
+
+        const caption = document.createElement("div");
+        caption.className = "thumb-caption";
+        caption.textContent = fileName; // podpis = nazwa pliku
+
+        thumb.appendChild(img);
+        thumb.appendChild(caption);
+        galleryEl.appendChild(thumb);
+
+        thumb.addEventListener("click", () => {
+          openLightbox(index);
         });
+      });
+    }
 
-        function show(){
-            fullImg.src = thumbs[idx].src;
-            counter.textContent = (idx+1) + ' / ' + thumbs.length;
-            full.style.display = 'flex';
-        }
-        function hideFull(){ full.style.display = 'none'; }
-        function change(d){
-            idx = (idx + d + thumbs.length) % thumbs.length;
-            show();
-        }
-        document.addEventListener('keydown',e=>{
-            if(full.style.display === 'flex'){
-                if(e.key === 'Escape') hideFull();
-                if(e.key === 'ArrowLeft') change(-1);
-                if(e.key === 'ArrowRight') change(1);
-            }
-        });
-    </script>
+    function openLightbox(index) {
+      currentIndex = index;
+      updateLightboxImage();
+      lightboxEl.classList.add("visible");
+      lightboxEl.setAttribute("aria-hidden", "false");
+    }
+
+    function closeLightbox() {
+      lightboxEl.classList.remove("visible");
+      lightboxEl.setAttribute("aria-hidden", "true");
+    }
+
+    function updateLightboxImage() {
+      const fileName = images[currentIndex];
+      lightboxImageEl.src = encodeURI(fileName);
+      lightboxImageEl.alt = fileName;
+      lightboxCaptionEl.textContent = fileName;
+    }
+
+    function showNext() {
+      currentIndex = (currentIndex + 1) % images.length;
+      updateLightboxImage();
+    }
+
+    function showPrev() {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      updateLightboxImage();
+    }
+
+    // Eventy
+
+    btnClose.addEventListener("click", closeLightbox);
+    btnNext.addEventListener("click", showNext);
+    btnPrev.addEventListener("click", showPrev);
+
+    // Zamknięcie po kliknięciu w tło
+    lightboxEl.addEventListener("click", (e) => {
+      if (e.target === lightboxEl) {
+        closeLightbox();
+      }
+    });
+
+    // Klawiatura: Esc, strzałki
+    document.addEventListener("keydown", (e) => {
+      if (!lightboxEl.classList.contains("visible")) return;
+
+      if (e.key === "Escape") {
+        closeLightbox();
+      } else if (e.key === "ArrowRight") {
+        showNext();
+      } else if (e.key === "ArrowLeft") {
+        showPrev();
+      }
+    });
+
+    // Start
+    buildGallery();
+  </script>
 </body>
 </html>
+
+
