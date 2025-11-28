@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=EB+Garamond:wght@400;500;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;700&display=swap"
     rel="stylesheet"
   >
   <style>
@@ -76,9 +76,8 @@
     }
 
     h1 {
-      font-family: "UnifrakturMaguntia", system-ui;
-      font-size: clamp(2.2rem, 4vw, 3rem);
-      letter-spacing: 0.08em;
+      font-size: clamp(2.1rem, 3.5vw, 2.8rem);
+      letter-spacing: 0.16em;
       text-transform: uppercase;
       color: #f4ebdd;
     }
@@ -348,7 +347,7 @@
         Część z nich mogła żyć w 1447 roku, część już nie, ale wszystkie te twarze mieszczą się w orbicie tej daty.
       </p>
       <div class="meta-line">
-        kliknij twarz, by obejrzeć ją na całą wysokość ekranu i przeczytać notatkę
+        kliknij twarz, by obejrzeć ją na całą wysokość ekranu
       </div>
     </header>
 
@@ -379,34 +378,34 @@
   </div>
 
   <script>
-    // <<< TU EDYTUJESZ LISTĘ TWARZY >>>
-    // Każdy wpis = jeden portret.
-    // file: dokładna nazwa pliku JPG w repo
-    // title: krótki tytuł (nad opisem w lightboxie)
-    // shortCaption: podpis pod miniaturą
-    // description: dłuższy tekst w lightboxie
+    // Podpis = nazwa pliku bez rozszerzenia, Ty nic tu nie ruszasz.
 
-    const galleryItems = [
-      {
-        file: "Autoportret  w chaperonie 1432 vEyck.jpg",
-        title: "Jan van Eyck? Autoportret w chaperonie",
-        shortCaption: "Autoportret w chaperonie, ok. 1432–1433, Jan van Eyck",
-        description: "Tutaj możesz wpisać dłuższy opis tej postaci i tego obrazu. Kim jest, gdzie znajduje się obraz, co Cię w nim interesuje badawczo."
-      },
-      {
-        file: "kanclerz Rolin ur 1376 vEyck 1435.jpg",
-        title: "Kanclerz Rolin",
-        shortCaption: "Kanclerz Rolin, ok. 1435, Jan van Eyck",
-        description: "Przykładowa notatka o Rolinie. Możesz tu wprowadzić informacje o jego pozycji, relacjach z dworem, ikonografii."
-      },
-      {
-        file: "Edward_Grimston 1446 PChristus.jpg",
-        title: "Edward Grimston",
-        shortCaption: "Edward Grimston, 1446, Petrus Christus",
-        description: "W to miejsce wpisz własny tekst o Grimstonie – kim jest, dlaczego trafia do projektu 1447, jakie źródła z nim wiążesz."
-      },
-      // --- DODAJ KOLEJNE TWARZE TUTAJ ---
+    const imageFiles = [
+      "Autoportret  w chaperonie 1432 vEyck.jpg",
+      "Edward_Grimston 1446 PChristus.jpg",
+      "Francesco_Sforza 1460.jpg",
+      "Giuliano Giamberti da Sangallo 1485 Piero di Cosimo.jpg",
+      "Jan v Eyck portret m ok 1430.jpg",
+      "Kartuz 1445 PCHristus.jpg",
+      "Pan Włochy ok 1475 AdMessina.jpg",
+      "Pan jan_de_leeuw 1436 vEyck.jpg",
+      "Pan w chaperonie 1433 VEyck.jpg",
+      "Pan w niebieskim chaperonie 1430 vEyck.jpg",
+      "Philippe de Croÿa Rogier van der Weydena 1450–1460..jpg",
+      "Pisanello_-_Filippo Maria ostatni książę Visconti zm 1447.jpg",
+      "Włochy 1476 AdMessina.jpg",
+      "dziadek 1490 Ghirlandaio.jpg",
+      "kanclerz Rolin ur 1376 vEyck 1435.jpg",
+      "kanonik van der Paele 1436 vEyck.jpg",
+      "pan Baudouin de Lannoy 1439 vEyck.jpg",
+      "poprzednie pokolenie Jan Bez Trwogi 1405.jpg"
     ];
+
+    const galleryItems = imageFiles.map(file => {
+      const base = file.replace(/\.[^.]+$/, "");
+      const label = base.replace(/_/g, " ");
+      return { file, label };
+    });
 
     const gridEl = document.getElementById("grid");
     const lightboxEl = document.getElementById("lightbox");
@@ -431,7 +430,7 @@
 
         const img = document.createElement("img");
         img.src = encodeURI(item.file);
-        img.alt = item.title || item.shortCaption || item.file;
+        img.alt = item.label;
         img.loading = "lazy";
 
         imgWrap.appendChild(img);
@@ -441,11 +440,11 @@
 
         const titleEl = document.createElement("div");
         titleEl.className = "card-title";
-        titleEl.textContent = item.title || item.file;
+        titleEl.textContent = item.label;
 
         const captionEl = document.createElement("div");
         captionEl.className = "card-caption";
-        captionEl.textContent = item.shortCaption || item.file;
+        captionEl.textContent = item.label;
 
         body.appendChild(titleEl);
         body.appendChild(captionEl);
@@ -463,10 +462,10 @@
       currentIndex = index;
       const item = galleryItems[currentIndex];
       lbImage.src = encodeURI(item.file);
-      lbImage.alt = item.title || item.shortCaption || item.file;
-      lbTitle.textContent = item.title || "";
-      lbCaption.textContent = item.shortCaption || "";
-      lbDesc.textContent = item.description || "";
+      lbImage.alt = item.label;
+      lbTitle.textContent = item.label;
+      lbCaption.textContent = item.label;
+      lbDesc.textContent = ""; // tu kiedyś wstawimy Twoje notatki
       lightboxEl.classList.add("visible");
       lightboxEl.setAttribute("aria-hidden", "false");
     }
@@ -505,3 +504,4 @@
   </script>
 </body>
 </html>
+
