@@ -3,26 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Twarze 1430-1450</title>
+    <title>Twarze 1430–1450</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;}
         body{font-family:Arial,sans-serif;background:#000;color:#fff;}
-        h1{text-align:center;padding:30px;font-size:2.5em;}
-        .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:25px;padding:40px;max-width:1600px;margin:0 auto;}
-        .photo{position:relative;cursor:pointer;border-radius:15px;overflow:hidden;box-shadow:0 10px 30px rgba(255,255,255,0.2);transition:all 0.4s;}
-        .photo:hover{transform:scale(1.05);box-shadow:0 20px 50px rgba(255,255,255,0.4);}
-        .photo img{width:100%;height:350px;object-fit:cover;display:block;}
-        .caption{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.9));color:#fff;padding:20px;font-size:1.1em;}
-        @media (max-width:768px){.gallery{gap:15px;padding:20px;}}
+        h1{text-align:center;padding:30px;font-size:2em;}
+        .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;padding:30px;max-width:1600px;margin:0 auto;}
+        .photo{position:relative;cursor:pointer;border-radius:12px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.7);transition:all 0.3s;}
+        .photo:hover{transform:scale(1.03);box-shadow:0 18px 40px rgba(0,0,0,0.9);}
+        .photo img{width:100%;height:360px;object-fit:cover;display:block;}
+        .caption{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.9));padding:12px 14px;font-size:0.95em;}
+        .fullscreen{position:fixed;inset:0;background:rgba(0,0,0,0.95);display:none;align-items:center;justify-content:center;z-index:1000;}
+        .fullscreen img{max-width:95vw;max-height:95vh;object-fit:contain;box-shadow:0 0 50px rgba(0,0,0,1);}
+        .nav{position:fixed;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.6);border:none;color:#fff;font-size:3rem;width:60px;height:60px;border-radius:50%;cursor:pointer;}
+        .nav.left{left:20px;}
+        .nav.right{right:20px;}
+        .close{position:fixed;top:20px;right:20px;background:rgba(0,0,0,0.8);border:none;color:#fff;font-size:2rem;width:50px;height:50px;border-radius:50%;cursor:pointer;}
+        .counter{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.7);padding:8px 18px;border-radius:20px;font-size:0.9rem;}
     </style>
 </head>
 <body>
-    <h1>👁️ Popatrz im w oczy. Portrety 1430-1450</h1>
-    <div class="gallery">
-        <!-- TWOJE ZDJĘCIA - działa automatycznie z GitHub -->
-        <img src="001.jpg" alt="Portret 1430-1450" style="grid-column:1fr;border-radius:15px;box-shadow:0 10px 30px rgba(255,255,255,0.2);cursor:pointer;">
-        <img src="002.jpg" alt="Portret 1430-1450" style="grid-column:1fr;border-radius:15px;box-shadow:0 10px 30px rgba(255,255,255,0.2);cursor:pointer;">
-        <!-- DODAJ TUTAJ INNE NAZWY SWOICH ZDJĘĆ -->
+    <h1>Twarze 1430–1450</h1>
+
+    <div class="gallery" id="gallery">
+        <div class="photo"><img src="poprzednie-pokolenie-Jan-Bez-Trwogi-1405.jpg" alt=""><div class="caption">Poprzednie pokolenie – Jan bez Trwogi, ok. 1405</div></div>
+        <div class="photo"><img src="Wlochy-1476-AdMessina.jpg" alt=""><div class="caption">Włochy, 1476, Antonello da Messina</div></div>
+        <div class="photo"><img src="Pisanello_-_Filippo-Maria-ostatni-ksiaze-Visconti-zm-1447.jpg" alt=""><div class="caption">Filippo Maria Visconti, Pisanello</div></div>
+        <div class="photo"><img src="Edward_Grimston-1446-PChristus.jpg" alt=""><div class="caption">Edward Grimston, ok. 1446, Petrus Christus</div></div>
+        <div class="photo"><img src="Autoportret-w-chaperonie-1432-vEyck.jpg" alt=""><div class="caption">Autoportret w chaperonie, ok. 1432, Jan van Eyck</div></div>
+        <div class="photo"><img src="dziadek-1490-Ghirlandaio.jpg" alt=""><div class="caption">Dziadek z wnukiem, ok. 1490, Ghirlandaio</div></div>
+        <div class="photo"><img src="Giuliano-Giamberti-da-Sangallo-1485-Piero-di-Cosimo.jpg" alt=""><div class="caption">Giuliano da Sangallo, ok. 1485, Piero di Cosimo</div></div>
+        <div class="photo"><img src="Francesco_Sforza-1460.jpg" alt=""><div class="caption">Francesco Sforza, ok. 1460</div></div>
+        <div class="photo"><img src="kanonik-van-der-Paele-1436-vEyck.jpg" alt=""><div class="caption">Kanonik van der Paele, 1436, Jan van Eyck</div></div>
+        <div class="photo"><img src="Kartuz-1445-PCHristus.jpg" alt=""><div class="caption">Kartuz, ok. 1445, Petrus Christus</div></div>
+        <div class="photo"><img src="kanclerz-Rolin-ur-1376-vEyck-1435.jpg" alt=""><div class="caption">Kanclerz Rolin, ok. 1435, Jan van Eyck</div></div>
+        <div class="photo"><img src="Jan-v-Eyck-portret-m-ok-1430.jpg" alt=""><div class="caption">Portret mężczyzny, ok. 1430, Jan van Eyck</div></div>
+        <div class="photo"><img src="Pan-w-niebieskim-chaperonie-1430-vEyck.jpg" alt=""><div class="caption">Pan w niebieskim chaperonie, ok. 1430, Jan van Eyck</div></div>
+        <div class="photo"><img src="Pan-w-chaperonie-1433-VEyck.jpg" alt=""><div class="caption">Pan w chaperonie, 1433, Jan van Eyck</div></div>
+        <div class="photo"><img src="pan-Baudouin-de-Lannoy-1439-vEyck.jpg" alt=""><div class="caption">Baudouin de Lannoy, 1439, Jan van Eyck</div></div>
+        <div class="photo"><img src="Pan-Wlochy-ok-1475-AdMessina.jpg" alt=""><div class="caption">Portret mężczyzny, Włochy ok. 1475, Antonello da Messina</div></div>
+        <div class="photo"><img src="Philippe-de-Croya-Rogier-van-der-Weydena-1450-1460.jpg" alt=""><div class="caption">Philippe de Croÿ, ok. 1450–1460, Rogier van der Weyden</div></div>
+        <div class="photo"><img src="Pan-jan_de_leeuw-1436-vEyck.jpg" alt=""><div class="caption">Jan de Leeuw, 1436, Jan van Eyck</div></div>
     </div>
-</body>
-</html>
+
+    <div class="fullscreen" id="full">
+        <button class="close" onclick="hideFull()">×</button>
+        <button class="nav left" onclick="change(-1)">‹</button>
+        <img id="fullImg" src="">
+        <button class="nav right" onclick="change(1)">›</button>
+        <div class="counter" id="count"></div>
+    </div>
+
+    <script>
+        const thumbs = Array.from(document.querySelectorAll('.photo img'));
+        const full = document.getElementById('full');
+        const fullImg = document.getElementById('fullImg');
+        const counter = document.getElementById('count');
+        let idx = 0;
+
+        thumbs.forEach((img,i)=>{
+            img.addEventListener('click',()=>{
+                idx = i;
+                show();
+            });
+        });
+
+        function show(){
+            fullImg.src = thumbs[idx].src;
+            counter.textContent = (idx+1) + ' / ' + thumbs.length;
+            full.style.display = 'flex';
+        }
+        function hideFull(){ full.style.display = 'none'; }
+        function change(d){
+            idx = (idx + d + thumbs.length) % thumbs.length;
+            show();
+        }
+        document.addEvent
