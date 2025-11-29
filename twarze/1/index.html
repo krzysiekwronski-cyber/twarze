@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
-  <title>Twarze – galeria</title>
+  <title>Galeria – Twarze</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -34,7 +34,7 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 1.4rem;
     }
 
     header {
@@ -65,29 +65,24 @@
       gap: 0.3rem;
     }
 
-    h1 {
+    #gallery-title {
       font-size: clamp(1.6rem, 3.4vw, 2.1rem);
       letter-spacing: 0.14em;
       text-transform: uppercase;
     }
 
-    .subtitle {
+    #gallery-subtitle {
       font-size: 0.9rem;
       color: var(--muted);
       max-width: 540px;
       line-height: 1.5;
+      text-align: justify;
     }
 
     main {
       display: flex;
       flex-direction: column;
       gap: 1.4rem;
-    }
-
-    .note {
-      font-size: 0.85rem;
-      color: var(--muted);
-      max-width: 520px;
     }
 
     .thumb-grid {
@@ -139,7 +134,7 @@
       color: #f2e6d7;
     }
 
-    /* Lightbox / powiększenie */
+    /* Lightbox */
     .lightbox {
       position: fixed;
       inset: 0;
@@ -188,13 +183,6 @@
       color: #f5ebdb;
     }
 
-    .lb-section-label {
-      font-size: 0.7rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
     .lb-title {
       font-size: 1rem;
       letter-spacing: 0.12em;
@@ -212,19 +200,13 @@
       line-height: 1.55;
       color: #e0d5c4;
       white-space: pre-wrap;
+      text-align: justify;
     }
 
     .lb-nav {
       margin-top: 0.7rem;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-
-    .lb-buttons {
-      display: flex;
+      justify-content: flex-end;
       gap: 0.4rem;
     }
 
@@ -290,23 +272,16 @@
   <div class="page">
     <header>
       <div class="breadcrumbs">
-        <a href="/">1447</a> &nbsp;/&nbsp; <a href="/twarze/">Twarze</a> &nbsp;/&nbsp; <span id="crumb-title">Galeria</span>
+        <a href="../../">1447</a> &nbsp;/&nbsp; <a href="../">Twarze</a> &nbsp;/&nbsp; <span id="crumb-title"></span>
       </div>
       <div class="title-group">
-        <h1 id="gallery-title">Galeria</h1>
-        <p class="subtitle" id="gallery-subtitle">
-          Kliknij twarz, by obejrzeć ją na całą wysokość ekranu i przeczytać notatkę.
-        </p>
+        <h1 id="gallery-title"></h1>
+        <p id="gallery-subtitle"></p>
       </div>
     </header>
 
     <main>
-      <p class="note">
-        Podpisy i teksty do poszczególnych portretów wczytywane są z plików .txt o tej samej nazwie co plik graficzny (w tym samym folderze).
-      </p>
-      <div id="thumb-grid" class="thumb-grid">
-        <!-- miniatury z images.txt -->
-      </div>
+      <div id="thumb-grid" class="thumb-grid"></div>
     </main>
   </div>
 
@@ -318,40 +293,36 @@
         <img id="lb-image" src="" alt="">
       </div>
       <aside class="lightbox-info">
-        <div class="lb-section-label">Twarze · sekcja</div>
         <div id="lb-title" class="lb-title"></div>
         <div id="lb-subtitle" class="lb-subtitle"></div>
         <div id="lb-body" class="lb-body"></div>
         <div class="lb-nav">
-          <div>Strzałki ← → przełączają twarze</div>
-          <div class="lb-buttons">
-            <button type="button" class="lb-btn" id="lb-prev">&larr;</button>
-            <button type="button" class="lb-btn" id="lb-next">&rarr;</button>
-          </div>
+          <button type="button" class="lb-btn" id="lb-prev">&larr;</button>
+          <button type="button" class="lb-btn" id="lb-next">&rarr;</button>
         </div>
       </aside>
     </div>
   </div>
 
   <footer>
-    1447 · Twarze – galeria · widok pełnoekranowy portretu
+    1447 · Twarze – galeria
   </footer>
 
   <script>
     const images = [];
+    const imageMeta = new Map();
     let currentIndex = 0;
 
     function getSectionIdFromPath() {
       const parts = window.location.pathname.split('/').filter(Boolean);
-      // .../twarze/1/ -> ostatni element to "1"
       return parts[parts.length - 1] || '1';
     }
 
-    // Ustawienie tytułu i okruszków na podstawie twarze-sections.txt
+    // Meta sekcji z content/twarze-sections.txt
     async function loadSectionMeta() {
       const id = getSectionIdFromPath();
       try {
-        const res = await fetch('/content/twarze-sections.txt');
+        const res = await fetch('../../content/twarze-sections.txt');
         if (!res.ok) return;
         const text = await res.text();
         const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
@@ -375,6 +346,34 @@
       } catch (e) {}
     }
 
+    // pobierz meta dla konkretnego pliku (z .txt)
+    async function fetchMeta(fileName) {
+      if (imageMeta.has(fileName)) return imageMeta.get(fileName);
+
+      const baseName = fileName.replace(/\.[^.]+$/, '');
+      const txtName = baseName + '.txt';
+      let meta = {
+        title: baseName,
+        subtitle: '',
+        body: ''
+      };
+
+      try {
+        const res = await fetch(txtName);
+        if (res.ok) {
+          const text = await res.text();
+          const lines = text.split(/\r?\n/);
+          meta.title = (lines[0] || baseName).trim();
+          meta.subtitle = (lines[1] || '').trim();
+          meta.body = lines.slice(2).join('\n').trim();
+        }
+      } catch (e) {}
+
+      imageMeta.set(fileName, meta);
+      return meta;
+    }
+
+    // Miniatury z images.txt
     async function loadImages() {
       try {
         const res = await fetch('images.txt');
@@ -383,7 +382,8 @@
         const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
         const grid = document.getElementById('thumb-grid');
 
-        lines.forEach((fileName, idx) => {
+        for (let idx = 0; idx < lines.length; idx++) {
+          const fileName = lines[idx];
           images.push(fileName);
 
           const figure = document.createElement('figure');
@@ -391,7 +391,7 @@
           figure.dataset.index = idx.toString();
 
           const img = document.createElement('img');
-          img.src = encodeURI(fileName);
+          img.src = fileName;        // dokładnie jak w images.txt
           img.alt = fileName;
 
           const caption = document.createElement('figcaption');
@@ -402,8 +402,15 @@
           figure.appendChild(caption);
           grid.appendChild(figure);
 
+          // podpis miniatury z pliku TXT (1. linia)
+          fetchMeta(fileName).then(meta => {
+            if (meta.title) {
+              caption.textContent = meta.title;
+            }
+          });
+
           figure.addEventListener('click', () => openLightbox(idx));
-        });
+        }
       } catch (e) {}
     }
 
@@ -428,34 +435,14 @@
     async function updateLightbox() {
       const fileName = images[currentIndex];
       const imgEl = document.getElementById('lb-image');
-      imgEl.src = encodeURI(fileName);
+      imgEl.src = fileName;
       imgEl.alt = fileName;
 
-      // domyślny tytuł – nazwa pliku bez rozszerzenia
-      const baseName = fileName.replace(/\.[^.]+$/, '');
-      let shortTitle = baseName;
-      let heading = '';
-      let body = '';
+      const meta = await fetchMeta(fileName);
 
-      // próbujemy wczytać plik TXT o tej samej nazwie
-      const txtName = baseName + '.txt';
-
-      try {
-        const res = await fetch(encodeURI(txtName));
-        if (res.ok) {
-          const text = await res.text();
-          const lines = text.split(/\r?\n/);
-          shortTitle = (lines[0] || baseName).trim();
-          heading = (lines[1] || '').trim();
-          body = lines.slice(2).join('\n').trim();
-        }
-      } catch (e) {
-        // brak TXT – zostawiamy domyślne
-      }
-
-      document.getElementById('lb-title').textContent = shortTitle;
-      document.getElementById('lb-subtitle').textContent = heading;
-      document.getElementById('lb-body').textContent = body || '';
+      document.getElementById('lb-title').textContent = meta.title || '';
+      document.getElementById('lb-subtitle').textContent = meta.subtitle || '';
+      document.getElementById('lb-body').textContent = meta.body || '';
     }
 
     // obsługa przycisków i klawiatury
@@ -471,7 +458,6 @@
       if (e.key === 'ArrowRight') showNext(1);
     });
 
-    // start
     loadSectionMeta();
     loadImages();
   </script>
