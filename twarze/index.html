@@ -35,12 +35,12 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 1.8rem;
+      gap: 2rem;
     }
 
     header {
       border-bottom: 1px solid rgba(255,255,255,0.06);
-      padding-bottom: 1rem;
+      padding-bottom: 0.9rem;
     }
 
     .breadcrumbs {
@@ -48,7 +48,6 @@
       text-transform: uppercase;
       letter-spacing: 0.18em;
       color: var(--muted);
-      margin-bottom: 0.4rem;
     }
 
     .breadcrumbs a {
@@ -60,23 +59,10 @@
       text-decoration: underline;
     }
 
-    .title-line {
+    main {
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
-    }
-
-    h1 {
-      font-size: clamp(1.8rem, 4vw, 2.2rem);
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-    }
-
-    main {
-      display: grid;
-      grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.3fr);
-      gap: 2rem;
-      align-items: flex-start;
+      gap: 1.8rem;
     }
 
     .intro-box {
@@ -84,6 +70,7 @@
       border-radius: 14px;
       padding: 1.1rem 1.2rem 1.3rem;
       border: 1px solid rgba(255,255,255,0.06);
+      max-width: 900px;
     }
 
     .intro-h1 {
@@ -107,7 +94,7 @@
       text-align: justify;
     }
 
-    .right-column {
+    .sections-wrapper {
       display: flex;
       flex-direction: column;
       gap: 0.9rem;
@@ -120,10 +107,20 @@
       color: var(--muted);
     }
 
+    .sections-title::before {
+      content: "";
+      display: inline-block;
+      width: 32px;
+      height: 1px;
+      background: linear-gradient(to right, var(--accent), transparent);
+      margin-right: 0.75rem;
+      transform: translateY(-0.2em);
+    }
+
     .sections-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1fr);
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.4rem;
     }
 
     .section-link {
@@ -152,7 +149,7 @@
 
     .section-thumb {
       position: relative;
-      height: 220px; /* wyższe pole na miniaturę, żeby było widać więcej portretu */
+      height: 260px; /* więcej wysokości na portret */
       background: radial-gradient(circle at center, #201826, #090712 70%);
       display: flex;
       align-items: center;
@@ -164,6 +161,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: 50% 15%; /* trochę wyżej, żeby było więcej twarzy niż ramion */
       display: block;
       filter: grayscale(0.25) contrast(1.08);
       transform: scale(1.02);
@@ -173,6 +171,10 @@
     .section-card:hover .section-thumb img {
       transform: scale(1.06);
       filter: grayscale(0) contrast(1.16);
+    }
+
+    .section-thumb.empty {
+      border-bottom: 1px solid rgba(255,255,255,0.08);
     }
 
     .section-body {
@@ -208,12 +210,6 @@
       text-align: right;
     }
 
-    @media (max-width: 900px) {
-      main {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
-
     @media (max-width: 720px) {
       .page { padding-inline: 1rem; }
       .intro-box { padding: 0.9rem 0.85rem 1rem; }
@@ -226,9 +222,6 @@
       <div class="breadcrumbs">
         <a href="../">1447</a> &nbsp;/&nbsp; Twarze
       </div>
-      <div class="title-line">
-        <h1>Twarze</h1>
-      </div>
     </header>
 
     <main>
@@ -238,12 +231,12 @@
         <div id="intro-body" class="intro-body"></div>
       </section>
 
-      <aside class="right-column">
-        <div class="sections-title">Sekcje</div>
+      <section class="sections-wrapper">
+        <h2 class="sections-title">Sekcje</h2>
         <div id="sections-grid" class="sections-grid">
           <!-- wypełniane z twarze-sections.txt -->
         </div>
-      </aside>
+      </section>
     </main>
   </div>
 
@@ -340,6 +333,7 @@
           img.loading = 'lazy';
 
           thumb.innerHTML = '';
+          thumb.classList.remove('empty');
           thumb.appendChild(img);
         } catch (e) {}
       }
@@ -350,3 +344,4 @@
   </script>
 </body>
 </html>
+
