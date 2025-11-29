@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <title>1447 – Żmije i Pawęże</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Jedna, czytelna czcionka -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -103,6 +102,37 @@
     main {
       flex: 1;
       padding-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .home-intro {
+      max-width: 720px;
+      background: radial-gradient(circle at top left, rgba(255,255,255,0.03), transparent 60%);
+      border-radius: 16px;
+      padding: 1rem 1.1rem 1.2rem;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .home-intro-h1 {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #f0e5d6;
+      margin-bottom: 0.15rem;
+    }
+
+    .home-intro-h2 {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 0.45rem;
+    }
+
+    .home-intro-body {
+      font-size: 0.95rem;
+      color: #d3c9b8;
+      line-height: 1.5;
     }
 
     .section-title {
@@ -123,13 +153,18 @@
       transform: translateY(-0.2em);
     }
 
-    .galleries-grid {
+    .sections-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
       gap: 1.4rem;
     }
 
-    .gallery-card {
+    .section-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .section-card {
       position: relative;
       background: radial-gradient(circle at top, #262134 0, #131320 48%, #090712 100%);
       border-radius: 18px;
@@ -138,9 +173,12 @@
       box-shadow: var(--shadow-soft);
       cursor: pointer;
       transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      min-height: 220px;
     }
 
-    .gallery-card::before {
+    .section-card::before {
       content: "";
       position: absolute;
       inset: 0;
@@ -150,108 +188,86 @@
       pointer-events: none;
     }
 
-    .gallery-card:hover {
+    .section-card:hover {
       transform: translateY(-4px);
       box-shadow: 0 26px 60px rgba(0,0,0,1);
       border-color: rgba(200,180,160,0.4);
       background: radial-gradient(circle at top, #31263c 0, #131320 48%, #090712 100%);
     }
 
-    .gallery-card:hover::before {
+    .section-card:hover::before {
       opacity: 1;
     }
 
-    .gallery-thumb {
+    .section-thumb {
       position: relative;
-      height: 210px;
+      height: 150px;
       overflow: hidden;
+      background: radial-gradient(circle at center, #201826, #090712 70%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .gallery-thumb img {
+    .section-thumb img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
-      filter: grayscale(0.2) contrast(1.12);
-      transform: scale(1.05);
+      filter: grayscale(0.25) contrast(1.08);
+      transform: scale(1.04);
       transition: transform 0.35s ease, filter 0.35s ease;
     }
 
-    .gallery-card:hover .gallery-thumb img {
-      transform: scale(1.09);
-      filter: grayscale(0) contrast(1.18);
+    .section-card:hover .section-thumb img {
+      transform: scale(1.08);
+      filter: grayscale(0) contrast(1.16);
     }
 
-    .gallery-ribbon {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: linear-gradient(135deg, rgba(10,10,16,0.9), rgba(70,10,20,0.95));
-      border-radius: 999px;
-      padding: 0.18rem 0.7rem 0.22rem;
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: #f3ebdc;
-      border: 1px solid rgba(200,190,170,0.4);
-      backdrop-filter: blur(6px);
-    }
-
-    .gallery-body {
-      padding: 0.85rem 0.95rem 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
-    }
-
-    .gallery-title {
-      font-size: 1.1rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: #f5ebdb;
-    }
-
-    .gallery-meta {
-      font-size: 0.8rem;
+    .section-thumb.placeholder {
+      border-bottom: 1px dashed rgba(255,255,255,0.08);
       color: var(--muted);
+      font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 0.16em;
     }
 
-    .gallery-desc {
+    .section-body {
+      padding: 0.85rem 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      flex: 1;
+    }
+
+    .section-name {
+      font-size: 1.05rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #f5ebdb;
+    }
+
+    .section-desc {
       font-size: 0.9rem;
       color: #cbc2b2;
       line-height: 1.4;
-      margin-top: 0.2rem;
     }
 
-    .gallery-footer {
-      margin-top: 0.4rem;
+    .section-meta {
+      margin-top: auto;
       font-size: 0.78rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
       color: #9e8f7d;
       opacity: 0.85;
-    }
-
-    .gallery-footer span {
-      display: inline-flex;
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 0.4rem;
     }
 
-    .gallery-footer span::before {
-      content: "";
-      width: 5px;
-      height: 5px;
-      border-radius: 999px;
-      background: var(--accent);
-      box-shadow: 0 0 9px var(--accent-soft);
-    }
-
-    .gallery-footer small {
-      opacity: 0.7;
+    .badge {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
     }
 
     footer {
@@ -263,11 +279,6 @@
       max-width: 1200px;
       margin: 0 auto;
       width: 100%;
-    }
-
-    a.card-link {
-      text-decoration: none;
-      color: inherit;
     }
 
     @media (max-width: 720px) {
@@ -282,8 +293,11 @@
       .logo-tagline-sub {
         max-width: 100%;
       }
-      .galleries-grid {
+      .sections-grid {
         grid-template-columns: minmax(0, 1fr);
+      }
+      .home-intro {
+        padding: 0.9rem 0.85rem 1rem;
       }
     }
   </style>
@@ -306,37 +320,182 @@
     </header>
 
     <main>
-      <h2 class="section-title">Galerie</h2>
-      <div class="galleries-grid">
-        <!-- KAFEL – FACECI 1440 -->
-        <a class="card-link" href="faceci1440.html">
-          <article class="gallery-card">
-            <div class="gallery-thumb">
-              <img src="Autoportret%20%20w%20chaperonie%201432%20vEyck.jpg" alt="faceci 1440 – galeria portretów" loading="lazy" />
-              <div class="gallery-ribbon">Nowa galeria</div>
+      <section class="home-intro">
+        <div id="home-intro-h1" class="home-intro-h1"></div>
+        <div id="home-intro-h2" class="home-intro-h2"></div>
+        <div id="home-intro-body" class="home-intro-body"></div>
+      </section>
+
+      <section>
+        <h2 class="section-title">Działy</h2>
+        <div class="sections-grid">
+          <!-- Twarze -->
+          <a class="section-link" href="/twarze/">
+            <article class="section-card">
+              <div class="section-thumb" id="thumb-twarze">
+                <span>brak miniatury</span>
+              </div>
+              <div class="section-body">
+                <div class="section-name">Twarze</div>
+                <div class="section-desc">
+                  Portrety ludzi, którzy mogliby mijać się wzrokiem w roku 1447 – nawet jeśli powstali daleko od Krakowa.
+                </div>
+                <div class="section-meta">
+                  <span class="badge">sekcja aktywna</span>
+                  <span>→ wejdź</span>
+                </div>
+              </div>
+            </article>
+          </a>
+
+          <!-- Moda -->
+          <article class="section-card">
+            <div class="section-thumb placeholder">
+              <span>brak materiału</span>
             </div>
-            <div class="gallery-body">
-              <h3 class="gallery-title">faceci 1440</h3>
-              <div class="gallery-meta">portrety mężczyzn ok. 1430–1450</div>
-              <p class="gallery-desc">
-                Kilkunastu mężczyzn z obrazów północnego i południowego renesansu. Twarze, które mogły się spotkać w roku 1447.
-              </p>
-              <div class="gallery-footer">
-                <span>wejdź do środka</span>
-                <small>↳ kilkanaście twarzy</small>
+            <div class="section-body">
+              <div class="section-name">Moda</div>
+              <div class="section-desc">
+                Strój jako znak czasu. Kiedy pojawią się pierwsze sylwetki, zobaczysz je tutaj.
+              </div>
+              <div class="section-meta">
+                <span class="badge">w przygotowaniu</span>
+                <span> </span>
               </div>
             </div>
           </article>
-        </a>
-      </div>
+
+          <!-- Mapy -->
+          <article class="section-card">
+            <div class="section-thumb placeholder">
+              <span>brak materiału</span>
+            </div>
+            <div class="section-body">
+              <div class="section-name">Mapy</div>
+              <div class="section-desc">
+                Miejsca, które wtedy istniały, zmieniały nazwy albo zniknęły – na mapach i poza nimi.
+              </div>
+              <div class="section-meta">
+                <span class="badge">w przygotowaniu</span>
+                <span> </span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Konstrukcje -->
+          <article class="section-card">
+            <div class="section-thumb placeholder">
+              <span>brak materiału</span>
+            </div>
+            <div class="section-body">
+              <div class="section-name">Konstrukcje</div>
+              <div class="section-desc">
+                Budowle, miasta, mosty i wszystko to, co stanowiło scenografię roku 1447.
+              </div>
+              <div class="section-meta">
+                <span class="badge">w przygotowaniu</span>
+                <span> </span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Historia -->
+          <article class="section-card">
+            <div class="section-thumb placeholder">
+              <span>brak materiału</span>
+            </div>
+            <div class="section-body">
+              <div class="section-name">Historia</div>
+              <div class="section-desc">
+                Wydarzenia, które przechodzą przez tę datę – i takie, które milkną tuż przed nią.
+              </div>
+              <div class="section-meta">
+                <span class="badge">w przygotowaniu</span>
+                <span> </span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Inne -->
+          <article class="section-card">
+            <div class="section-thumb placeholder">
+              <span>brak materiału</span>
+            </div>
+            <div class="section-body">
+              <div class="section-name">Inne</div>
+              <div class="section-desc">
+                Rzeczy, dla których nie ma jeszcze osobnego działu, ale nie mieszczą się w przypisie.
+              </div>
+              <div class="section-meta">
+                <span class="badge">w przygotowaniu</span>
+                <span> </span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
     </main>
   </div>
 
   <footer>
     1447 · Żmije i Pawęże – robocza wersja strony · statyczna www na GitHub Pages
   </footer>
+
+  <script>
+    // Ładowanie intro SG z content/home-intro.txt
+    async function loadHomeIntro() {
+      try {
+        const res = await fetch('/content/home-intro.txt');
+        if (!res.ok) return;
+        const text = await res.text();
+        const lines = text.split(/\r?\n/);
+
+        const h1 = (lines[0] || '').trim();
+        const h2 = (lines[1] || '').trim();
+        const body = lines.slice(2).join(' ').trim();
+
+        const elH1 = document.getElementById('home-intro-h1');
+        const elH2 = document.getElementById('home-intro-h2');
+        const elBody = document.getElementById('home-intro-body');
+
+        if (h1) elH1.textContent = h1;
+        if (h2) elH2.textContent = h2;
+        if (body) elBody.textContent = body;
+      } catch (e) {
+        // brak intro to nie katastrofa
+      }
+    }
+
+    // Ładowanie miniatury dla sekcji "Twarze" z /twarze/1/images.txt
+    async function loadTwarzeThumb() {
+      const thumbEl = document.getElementById('thumb-twarze');
+      try {
+        const res = await fetch('/twarze/1/images.txt');
+        if (!res.ok) return;
+        const text = await res.text();
+        const lines = text.split(/\r?\n/).map(l => l.trim());
+        const firstFile = lines.find(l => l.length > 0);
+        if (!firstFile) return;
+
+        const img = document.createElement('img');
+        img.src = encodeURI('/twarze/1/' + firstFile);
+        img.alt = 'Twarze – miniatura';
+        img.loading = 'lazy';
+
+        thumbEl.innerHTML = '';
+        thumbEl.classList.remove('placeholder');
+        thumbEl.appendChild(img);
+      } catch (e) {
+        // jak nie ma pliku, zostaje placeholder
+      }
+    }
+
+    loadHomeIntro();
+    loadTwarzeThumb();
+  </script>
 </body>
 </html>
+
 
 
 
