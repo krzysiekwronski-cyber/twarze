@@ -9,18 +9,16 @@
 
     :root {
       --bg: #050507;
-      --bg-alt: #101016;
       --fg: #f5f0e6;
       --muted: #a19b8b;
-      --accent: #a01020;
       --border: #272435;
       --shadow-soft: 0 18px 40px rgba(0,0,0,0.9);
     }
 
     body {
       min-height: 100vh;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #141428 0, #050507 55%, #020206 100%);
+      font-family: system-ui, sans-serif;
+      background: radial-gradient(circle at top, #141428 0, #050507 55%);
       color: var(--fg);
       display: flex;
       flex-direction: column;
@@ -37,10 +35,7 @@
       gap: 1.4rem;
     }
 
-    header {
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      padding-bottom: 0.9rem;
-    }
+    header { border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 0.9rem; }
 
     .breadcrumbs {
       font-size: 0.8rem;
@@ -50,25 +45,14 @@
       margin-bottom: 0.35rem;
     }
 
-    .breadcrumbs a {
-      color: var(--muted);
-      text-decoration: none;
-    }
-
-    .breadcrumbs a:hover {
-      text-decoration: underline;
-    }
-
-    .title-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-    }
+    .breadcrumbs a { color: var(--muted); text-decoration: none; }
+    .breadcrumbs a:hover { text-decoration: underline; }
 
     #gallery-title {
       font-size: clamp(1.6rem, 3.4vw, 2.1rem);
       letter-spacing: 0.14em;
       text-transform: uppercase;
+      margin-bottom: 0.4rem;
     }
 
     #gallery-subtitle {
@@ -79,12 +63,6 @@
       text-align: justify;
     }
 
-    main {
-      display: flex;
-      flex-direction: column;
-      gap: 1.4rem;
-    }
-
     .thumb-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -92,20 +70,13 @@
     }
 
     .thumb {
-      position: relative;
-      background: radial-gradient(circle at center, #201826, #090712 70%);
       border-radius: 12px;
       overflow: hidden;
+      background: #090712;
       cursor: pointer;
       border: 1px solid rgba(255,255,255,0.06);
       box-shadow: var(--shadow-soft);
-      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
-    }
-
-    .thumb:hover {
-      transform: translateY(-3px);
-      border-color: rgba(200,180,160,0.5);
-      box-shadow: 0 22px 50px rgba(0,0,0,1);
+      position: relative;
     }
 
     .thumb img {
@@ -114,8 +85,7 @@
       object-fit: cover;
       display: block;
       filter: grayscale(0.25) contrast(1.04);
-      transform: scale(1.02);
-      transition: transform 0.3s ease, filter 0.3s ease;
+      transition: 0.3s ease;
     }
 
     .thumb:hover img {
@@ -129,23 +99,22 @@
       right: 0;
       bottom: 0;
       padding: 0.3rem 0.45rem;
-      font-size: 0.75rem;
       background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+      font-size: 0.75rem;
       color: #f2e6d7;
     }
 
-    /* Lightbox */
+    /* LIGHTBOX */
+
     .lightbox {
       position: fixed;
       inset: 0;
       background: rgba(0,0,0,0.94);
       display: none;
-      z-index: 100;
+      z-index: 200;
     }
 
-    .lightbox.active {
-      display: flex;
-    }
+    .lightbox.active { display: flex; }
 
     .lightbox-inner {
       max-width: 1200px;
@@ -154,7 +123,6 @@
       padding: 1rem;
       display: flex;
       gap: 1.2rem;
-      align-items: stretch;
     }
 
     .lightbox-image-wrap {
@@ -162,134 +130,76 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
     }
 
     .lightbox-image-wrap img {
       max-height: 100vh;
       max-width: 100%;
-      width: auto;
-      height: auto;
       object-fit: contain;
       box-shadow: 0 26px 70px rgba(0,0,0,0.95);
     }
 
     .lightbox-info {
       flex: 1.4;
-      max-width: 420px;
       display: flex;
       flex-direction: column;
       gap: 0.4rem;
-      color: #f5ebdb;
+      max-width: 420px;
     }
 
-    .lb-title {
-      font-size: 1rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
+    .lb-title { font-size: 1rem; text-transform: uppercase; letter-spacing: 0.12em; }
+    .lb-subtitle { font-size: 0.9rem; color: var(--muted); }
+    .lb-body { font-size: 0.9rem; line-height: 1.55; white-space: pre-wrap; text-align: justify; }
 
-    .lb-subtitle {
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-bottom: 0.35rem;
-    }
+    /* NAV ARROWS FIXED CENTER */
 
-    .lb-body {
-      font-size: 0.9rem;
-      line-height: 1.55;
-      color: #e0d5c4;
-      white-space: pre-wrap;
-      text-align: justify;
-    }
-
-    /* strzałki na stałej wysokości, w środku ekranu */
     .lb-nav {
       position: fixed;
       top: 50%;
       left: 0;
       right: 0;
       transform: translateY(-50%);
+      pointer-events: none;
       display: flex;
       justify-content: space-between;
-      padding: 0 1.5rem;
-      pointer-events: none;
-      z-index: 110;
+      padding: 0 2rem;
+      z-index: 300;
     }
 
     .lb-btn {
+      pointer-events: auto;
       border: 1px solid rgba(255,255,255,0.18);
       background: rgba(10,10,16,0.7);
       color: #f5f0e6;
       padding: 0.35rem 0.6rem;
       border-radius: 999px;
-      font-size: 0.9rem;
+      font-size: 1rem;
       cursor: pointer;
-      min-width: 2.3rem;
+      min-width: 2.4rem;
       text-align: center;
-      pointer-events: auto;
-    }
-
-    .lb-btn:hover {
-      background: rgba(40,40,60,0.9);
     }
 
     .lb-close {
       position: fixed;
       top: 0.8rem;
       right: 1rem;
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       cursor: pointer;
       color: var(--muted);
-      padding: 0.2rem 0.4rem;
-      z-index: 120;
-    }
-
-    .lb-close:hover {
-      color: #ffffff;
-    }
-
-    @media (max-width: 900px) {
-      .lightbox-inner {
-        flex-direction: column;
-        max-height: 100vh;
-        overflow-y: auto;
-      }
-      .lightbox-info {
-        max-width: 100%;
-      }
-      .lb-nav {
-        padding: 0 0.8rem;
-      }
-    }
-
-    @media (max-width: 720px) {
-      .page { padding-inline: 0.9rem; }
-      .thumb-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
-    }
-
-    footer {
-      max-width: 1200px;
-      margin: 0 auto;
-      width: 100%;
-      padding: 0.7rem 1.1rem 0.7rem;
-      font-size: 0.8rem;
-      color: var(--muted);
-      border-top: 1px solid rgba(255,255,255,0.05);
-      text-align: right;
+      z-index: 301;
     }
   </style>
 </head>
 <body>
+
   <div class="page">
     <header>
       <div class="breadcrumbs">
-        <a href="../../">1447</a> &nbsp;/&nbsp; <a href="../">Twarze</a> &nbsp;/&nbsp; <span id="crumb-title"></span>
+        <a href="../../">1447</a> / <a href="../">Twarze</a> / <span id="crumb-title"></span>
       </div>
-      <div class="title-group">
-        <h1 id="gallery-title"></h1>
-        <p id="gallery-subtitle"></p>
-      </div>
+
+      <h1 id="gallery-title"></h1>
+      <p id="gallery-subtitle"></p>
     </header>
 
     <main>
@@ -297,137 +207,97 @@
     </main>
   </div>
 
-  <!-- Lightbox -->
+  <!-- LIGHTBOX -->
   <div id="lightbox" class="lightbox">
-    <div class="lb-close" id="lb-close" aria-label="Zamknij">&times;</div>
+    <div class="lb-close" id="lb-close">&times;</div>
+
     <div class="lightbox-inner">
       <div class="lightbox-image-wrap">
-        <img id="lb-image" src="" alt="">
+        <img id="lb-image" />
       </div>
+
       <aside class="lightbox-info">
         <div id="lb-title" class="lb-title"></div>
         <div id="lb-subtitle" class="lb-subtitle"></div>
         <div id="lb-body" class="lb-body"></div>
       </aside>
     </div>
+
     <div class="lb-nav">
-      <button type="button" class="lb-btn" id="lb-prev">&larr;</button>
-      <button type="button" class="lb-btn" id="lb-next">&rarr;</button>
+      <button id="lb-prev" class="lb-btn">&larr;</button>
+      <button id="lb-next" class="lb-btn">&rarr;</button>
     </div>
   </div>
-
-  <footer>
-    1447 · Twarze – galeria
-  </footer>
 
   <script>
     const images = [];
     const imageMeta = new Map();
     let currentIndex = 0;
 
-    function getSectionIdFromPath() {
-      const parts = window.location.pathname.split('/').filter(Boolean);
-      return parts[parts.length - 1] || '1';
+    function getSectionId() {
+      const parts = location.pathname.split('/').filter(Boolean);
+      return parts.pop();
     }
 
-    // Meta sekcji z content/twarze-sections.txt
     async function loadSectionMeta() {
-      const id = getSectionIdFromPath();
-      try {
-        const res = await fetch('../../content/twarze-sections.txt');
-        if (!res.ok) return;
-        const text = await res.text();
-        const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
-
-        for (const line of lines) {
-          const parts = line.split('|');
-          const lineId = (parts[0] || '').trim();
-          const title = (parts[1] || '').trim();
-          const desc  = (parts[2] || '').trim();
-          if (lineId === id) {
-            if (title) {
-              document.getElementById('gallery-title').textContent = title;
-              document.getElementById('crumb-title').textContent = 'Sekcja ' + id;
-            }
-            if (desc) {
-              document.getElementById('gallery-subtitle').textContent = desc;
-            }
-            break;
-          }
+      const id = getSectionId();
+      const text = await (await fetch('../../content/twarze-sections.txt')).text();
+      for (const line of text.split(/\r?\n/)) {
+        const [sid, title, desc] = line.split('|').map(s => s?.trim());
+        if (sid === id) {
+          document.getElementById('gallery-title').textContent = title || '';
+          document.getElementById('crumb-title').textContent = title || '';
+          document.getElementById('gallery-subtitle').textContent = desc || '';
+          break;
         }
-      } catch (e) {}
+      }
     }
 
-    // pobierz meta dla konkretnego pliku (z .txt)
-    async function fetchMeta(fileName) {
-      if (imageMeta.has(fileName)) return imageMeta.get(fileName);
-
-      const baseName = fileName.replace(/\.[^.]+$/, '');
-      const txtName = baseName + '.txt';
-      let meta = {
-        title: baseName,
-        subtitle: '',
-        body: ''
-      };
-
+    async function fetchMeta(file) {
+      if (imageMeta.has(file)) return imageMeta.get(file);
+      const base = file.replace(/\.[^.]+$/, '');
+      let meta = { title: base, subtitle: '', body: '' };
       try {
-        const res = await fetch(txtName);
-        if (res.ok) {
-          const text = await res.text();
-          const lines = text.split(/\r?\n/);
-          meta.title = (lines[0] || baseName).trim();
-          meta.subtitle = (lines[1] || '').trim();
-          meta.body = lines.slice(2).join('\n').trim();
-        }
-      } catch (e) {}
-
-      imageMeta.set(fileName, meta);
+        const txt = await (await fetch(base + '.txt')).text();
+        const lines = txt.split(/\r?\n/);
+        meta.title = lines[0]?.trim() || base;
+        meta.subtitle = lines[1]?.trim() || '';
+        meta.body = lines.slice(2).join('\n').trim();
+      } catch {}
+      imageMeta.set(file, meta);
       return meta;
     }
 
-    // Miniatury z images.txt
     async function loadImages() {
-      try {
-        const res = await fetch('images.txt');
-        if (!res.ok) return;
-        const text = await res.text();
-        const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
-        const grid = document.getElementById('thumb-grid');
+      const text = await (await fetch('images.txt')).text();
+      const files = text.split(/\r?\n/).filter(l => l.trim());
+      const grid = document.getElementById('thumb-grid');
 
-        for (let idx = 0; idx < lines.length; idx++) {
-          const fileName = lines[idx];
-          images.push(fileName);
+      files.forEach((file, i) => {
+        images.push(file);
 
-          const figure = document.createElement('figure');
-          figure.className = 'thumb';
-          figure.dataset.index = idx.toString();
+        const fig = document.createElement('figure');
+        fig.className = 'thumb';
+        fig.dataset.i = i;
 
-          const img = document.createElement('img');
-          img.src = fileName;        // dokładnie jak w images.txt
-          img.alt = fileName;
+        const img = document.createElement('img');
+        img.src = file;
 
-          const caption = document.createElement('figcaption');
-          caption.className = 'thumb-caption';
-          caption.textContent = fileName.replace(/\.[^.]+$/, '');
+        const cap = document.createElement('figcaption');
+        cap.className = 'thumb-caption';
+        cap.textContent = file.replace(/\.[^.]+$/, '');
 
-          figure.appendChild(img);
-          figure.appendChild(caption);
-          grid.appendChild(figure);
+        fig.append(img, cap);
+        grid.append(fig);
 
-          // podpis miniatury z pliku TXT (1. linia)
-          fetchMeta(fileName).then(meta => {
-            if (meta.title) {
-              caption.textContent = meta.title;
-            }
-          });
+        fetchMeta(file).then(meta => cap.textContent = meta.title);
 
-          figure.addEventListener('click', () => openLightbox(idx));
-        }
-      } catch (e) {}
+        fig.onclick = () => openLightbox(i);
+      });
     }
 
-    function openLightbox(index) {
-      currentIndex = index;
+    function openLightbox(i) {
+      currentIndex = i;
       updateLightbox();
       document.getElementById('lightbox').classList.add('active');
       document.body.style.overflow = 'hidden';
@@ -438,41 +308,36 @@
       document.body.style.overflow = '';
     }
 
-    function showNext(delta) {
-      if (!images.length) return;
+    function nav(delta) {
       currentIndex = (currentIndex + delta + images.length) % images.length;
       updateLightbox();
     }
 
     async function updateLightbox() {
-      const fileName = images[currentIndex];
-      const imgEl = document.getElementById('lb-image');
-      imgEl.src = fileName;
-      imgEl.alt = fileName;
-
-      const meta = await fetchMeta(fileName);
-
-      document.getElementById('lb-title').textContent = meta.title || '';
-      document.getElementById('lb-subtitle').textContent = meta.subtitle || '';
-      document.getElementById('lb-body').textContent = meta.body || '';
+      const file = images[currentIndex];
+      const meta = await fetchMeta(file);
+      document.getElementById('lb-image').src = file;
+      document.getElementById('lb-title').textContent = meta.title;
+      document.getElementById('lb-subtitle').textContent = meta.subtitle;
+      document.getElementById('lb-body').textContent = meta.body;
     }
 
-    // obsługa przycisków i klawiatury
-    document.getElementById('lb-close').addEventListener('click', closeLightbox);
-    document.getElementById('lb-prev').addEventListener('click', () => showNext(-1));
-    document.getElementById('lb-next').addEventListener('click', () => showNext(1));
+    document.getElementById('lb-close').onclick = closeLightbox;
+    document.getElementById('lb-prev').onclick = () => nav(-1);
+    document.getElementById('lb-next').onclick = () => nav(1);
 
-    document.addEventListener('keydown', (e) => {
-      const lb = document.getElementById('lightbox');
-      if (!lb.classList.contains('active')) return;
+    document.addEventListener('keydown', e => {
+      if (!document.getElementById('lightbox').classList.contains('active')) return;
       if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowLeft') showNext(-1);
-      if (e.key === 'ArrowRight') showNext(1);
+      if (e.key === 'ArrowLeft') nav(-1);
+      if (e.key === 'ArrowRight') nav(1);
     });
 
     loadSectionMeta();
     loadImages();
   </script>
+
 </body>
 </html>
+
 
