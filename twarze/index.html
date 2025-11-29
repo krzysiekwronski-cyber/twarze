@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Twarze – 1447</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #050507;
+      --bg-alt: #101016;
+      --bg-card: #131320;
+      --fg: #f5f0e6;
+      --muted: #a19b8b;
+      --accent: #a01020;
+      --border: #272435;
+      --shadow-soft: 0 18px 40px rgba(0,0,0,0.9);
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #141428 0, #050507 55%, #020206 100%);
+      color: var(--fg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 2.5rem;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+
+    header {
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 1rem;
+    }
+
+    .breadcrumbs {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .title-line {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 4vw, 2.2rem);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 540px;
+      line-height: 1.45;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+
+    .intro-box {
+      background: radial-gradient(circle at top left, rgba(255,255,255,0.03), transparent 60%);
+      border-radius: 14px;
+      padding: 1rem 1.1rem 1.1rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      max-width: 860px;
+    }
+
+    .intro-h1 {
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      margin-bottom: 0.2rem;
+      color: #f0e5d6;
+    }
+
+    .intro-h2 {
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .intro-body {
+      font-size: 0.95rem;
+      color: #d3c9b8;
+      line-height: 1.6;
+    }
+
+    .sections-title {
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      margin-bottom: 0.7rem;
+    }
+
+    .sections-title::before {
+      content: "";
+      display: inline-block;
+      width: 32px;
+      height: 1px;
+      background: linear-gradient(to right, var(--accent), transparent);
+      margin-right: 0.75rem;
+      transform: translateY(-0.2em);
+    }
+
+    .sections-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.4rem;
+    }
+
+    .section-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .section-card {
+      background: radial-gradient(circle at top, #262134 0, #131320 48%, #090712 100%);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      min-height: 210px;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    .section-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(200,180,160,0.45);
+      box-shadow: 0 24px 60px rgba(0,0,0,1);
+    }
+
+    .section-thumb {
+      position: relative;
+      height: 140px;
+      background: radial-gradient(circle at center, #201826, #090712 70%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .section-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(0.25) contrast(1.08);
+      transform: scale(1.04);
+      transition: transform 0.35s ease, filter 0.35s ease;
+    }
+
+    .section-card:hover .section-thumb img {
+      transform: scale(1.08);
+      filter: grayscale(0) contrast(1.16);
+    }
+
+    .section-thumb.placeholder {
+      border-bottom: 1px dashed rgba(255,255,255,0.08);
+      color: var(--muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .thumb-label {
+      opacity: 0.85;
+    }
+
+    .section-body {
+      padding: 0.8rem 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      flex: 1;
+    }
+
+    .section-name {
+      font-size: 1rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #f5ebdb;
+    }
+
+    .section-desc {
+      font-size: 0.9rem;
+      color: #cbc2b2;
+      line-height: 1.4;
+    }
+
+    .section-meta {
+      font-size: 0.78rem;
+      color: #9e8f7d;
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    footer {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0.8rem 1.25rem 0.7rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      text-align: right;
+    }
+
+    @media (max-width: 720px) {
+      .page { padding-inline: 1rem; }
+      .sections-grid { grid-template-columns: minmax(0, 1fr); }
+      .intro-box { padding: 0.9rem 0.85rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="breadcrumbs">
+        <a href="/">1447</a> &nbsp;/&nbsp; Twarze
+      </div>
+      <div class="title-line">
+        <h1>Twarze</h1>
+        <p class="subtitle">
+          Próba zobaczenia roku 1447 przez spojrzenia ludzi, których znamy z kilku centymetrów farby na desce.
+        </p>
+      </div>
+    </header>
+
+    <main>
+      <section class="intro-box">
+        <div id="intro-h1" class="intro-h1"></div>
+        <div id="intro-h2" class="intro-h2"></div>
+        <div id="intro-body" class="intro-body"></div>
+      </section>
+
+      <section>
+        <h2 class="sections-title">Podziały w dziale „Twarze”</h2>
+        <div id="sections-grid" class="sections-grid">
+          <!-- Karty sekcji wczytywane z twarze-sections.txt -->
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    1447 · Twarze – poziom 2 · sekcje wczytywane z pliku tekstowego
+  </footer>
+
+  <script>
+    // 1) Intro z content/twarze-intro.txt
+    async function loadIntro() {
+      try {
+        const res = await fetch('/content/twarze-intro.txt');
+        if (!res.ok) return;
+        const text = await res.text();
+        const lines = text.split(/\r?\n/);
+        const h1 = (lines[0] || '').trim();
+        const h2 = (lines[1] || '').trim();
+        const body = lines.slice(2).join(' ').trim();
+
+        if (h1) document.getElementById('intro-h1').textContent = h1;
+        if (h2) document.getElementById('intro-h2').textContent = h2;
+        if (body) document.getElementById('intro-body').textContent = body;
+      } catch (e) {}
+    }
+
+    // 2) Sekcje z content/twarze-sections.txt
+    // Format linii: ID|Tytuł|Krótki opis
+    async function loadSections() {
+      const grid = document.getElementById('sections-grid');
+      try {
+        const res = await fetch('/content/twarze-sections.txt');
+        if (!res.ok) return;
+        const text = await res.text();
+        const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+
+        for (const line of lines) {
+          const parts = line.split('|');
+          const id = (parts[0] || '').trim();
+          const title = (parts[1] || '').trim();
+          const desc = (parts[2] || '').trim();
+
+          if (!id || !title) continue;
+
+          const link = document.createElement('a');
+          link.className = 'section-link';
+          link.href = '/twarze/' + encodeURIComponent(id) + '/';
+
+          const card = document.createElement('article');
+          card.className = 'section-card';
+
+          const thumb = document.createElement('div');
+          thumb.className = 'section-thumb placeholder';
+          thumb.dataset.sectionId = id;
+          const span = document.createElement('span');
+          span.className = 'thumb-label';
+          span.textContent = 'brak miniatury';
+          thumb.appendChild(span);
+
+          const bodyEl = document.createElement('div');
+          bodyEl.className = 'section-body';
+
+          const nameEl = document.createElement('div');
+          nameEl.className = 'section-name';
+          nameEl.textContent = title;
+
+          const descEl = document.createElement('div');
+          descEl.className = 'section-desc';
+          descEl.textContent = desc || '';
+
+          const metaEl = document.createElement('div');
+          metaEl.className = 'section-meta';
+          const badge = document.createElement('span');
+          badge.className = 'badge';
+          badge.textContent = 'wejście do galerii';
+          const arrow = document.createElement('span');
+          arrow.textContent = '→';
+
+          metaEl.appendChild(badge);
+          metaEl.appendChild(arrow);
+
+          bodyEl.appendChild(nameEl);
+          if (desc) bodyEl.appendChild(descEl);
+          bodyEl.appendChild(metaEl);
+
+          card.appendChild(thumb);
+          card.appendChild(bodyEl);
+          link.appendChild(card);
+          grid.appendChild(link);
+        }
+
+        // po stworzeniu kart – spróbujmy wczytać miniatury
+        loadSectionThumbs();
+      } catch (e) {}
+    }
+
+    // 3) Miniatury z twarze/<id>/images.txt (pierwszy plik na liście)
+    async function loadSectionThumbs() {
+      const thumbs = document.querySelectorAll('.section-thumb.placeholder');
+      for (const thumb of thumbs) {
+        const id = thumb.dataset.sectionId;
+        try {
+          const res = await fetch('/twarze/' + encodeURIComponent(id) + '/images.txt');
+          if (!res.ok) continue;
+          const text = await res.text();
+          const lines = text.split(/\r?\n/).map(l => l.trim());
+          const firstFile = lines.find(l => l.length > 0);
+          if (!firstFile) continue;
+
+          const img = document.createElement('img');
+          img.src = encodeURI('/twarze/' + id + '/' + firstFile);
+          img.alt = 'Miniatura sekcji ' + id;
+          img.loading = 'lazy';
+
+          thumb.innerHTML = '';
+          thumb.classList.remove('placeholder');
+          thumb.appendChild(img);
+        } catch (e) {
+          // brak obrazu = zostaje placeholder
+        }
+      }
+    }
+
+    loadIntro();
+    loadSections();
+  </script>
+</body>
+</html>
