@@ -203,11 +203,18 @@
       text-align: justify;
     }
 
+    /* strzałki na stałej wysokości, w środku ekranu */
     .lb-nav {
-      margin-top: 0.7rem;
+      position: fixed;
+      top: 50%;
+      left: 0;
+      right: 0;
+      transform: translateY(-50%);
       display: flex;
-      justify-content: flex-end;
-      gap: 0.4rem;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      pointer-events: none;
+      z-index: 110;
     }
 
     .lb-btn {
@@ -216,10 +223,11 @@
       color: #f5f0e6;
       padding: 0.35rem 0.6rem;
       border-radius: 999px;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       cursor: pointer;
-      min-width: 2.1rem;
+      min-width: 2.3rem;
       text-align: center;
+      pointer-events: auto;
     }
 
     .lb-btn:hover {
@@ -234,6 +242,7 @@
       cursor: pointer;
       color: var(--muted);
       padding: 0.2rem 0.4rem;
+      z-index: 120;
     }
 
     .lb-close:hover {
@@ -248,6 +257,9 @@
       }
       .lightbox-info {
         max-width: 100%;
+      }
+      .lb-nav {
+        padding: 0 0.8rem;
       }
     }
 
@@ -296,11 +308,11 @@
         <div id="lb-title" class="lb-title"></div>
         <div id="lb-subtitle" class="lb-subtitle"></div>
         <div id="lb-body" class="lb-body"></div>
-        <div class="lb-nav">
-          <button type="button" class="lb-btn" id="lb-prev">&larr;</button>
-          <button type="button" class="lb-btn" id="lb-next">&rarr;</button>
-        </div>
       </aside>
+    </div>
+    <div class="lb-nav">
+      <button type="button" class="lb-btn" id="lb-prev">&larr;</button>
+      <button type="button" class="lb-btn" id="lb-next">&rarr;</button>
     </div>
   </div>
 
@@ -335,7 +347,7 @@
           if (lineId === id) {
             if (title) {
               document.getElementById('gallery-title').textContent = title;
-              document.getElementById('crumb-title').textContent = title;
+              document.getElementById('crumb-title').textContent = 'Sekcja ' + id;
             }
             if (desc) {
               document.getElementById('gallery-subtitle').textContent = desc;
@@ -463,3 +475,4 @@
   </script>
 </body>
 </html>
+
