@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Twarze – galeria</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #050507;
+      --bg-alt: #101016;
+      --fg: #f5f0e6;
+      --muted: #a19b8b;
+      --accent: #a01020;
+      --border: #272435;
+      --shadow-soft: 0 18px 40px rgba(0,0,0,0.9);
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #141428 0, #050507 55%, #020206 100%);
+      color: var(--fg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem 1.1rem 2.5rem;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    header {
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 0.9rem;
+    }
+
+    .breadcrumbs {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    h1 {
+      font-size: clamp(1.6rem, 3.4vw, 2.1rem);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+      max-width: 540px;
+      line-height: 1.5;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .note {
+      font-size: 0.85rem;
+      color: var(--muted);
+      max-width: 520px;
+    }
+
+    .thumb-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.9rem;
+    }
+
+    .thumb {
+      position: relative;
+      background: radial-gradient(circle at center, #201826, #090712 70%);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+    }
+
+    .thumb:hover {
+      transform: translateY(-3px);
+      border-color: rgba(200,180,160,0.5);
+      box-shadow: 0 22px 50px rgba(0,0,0,1);
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(0.25) contrast(1.04);
+      transform: scale(1.02);
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+
+    .thumb:hover img {
+      transform: scale(1.06);
+      filter: grayscale(0) contrast(1.12);
+    }
+
+    .thumb-caption {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 0.3rem 0.45rem;
+      font-size: 0.75rem;
+      background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+      color: #f2e6d7;
+    }
+
+    /* Lightbox / powiększenie */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.94);
+      display: none;
+      z-index: 100;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox-inner {
+      max-width: 1200px;
+      margin: auto;
+      width: 100%;
+      padding: 1rem;
+      display: flex;
+      gap: 1.2rem;
+      align-items: stretch;
+    }
+
+    .lightbox-image-wrap {
+      flex: 2.3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .lightbox-image-wrap img {
+      max-height: 100vh;
+      max-width: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      box-shadow: 0 26px 70px rgba(0,0,0,0.95);
+    }
+
+    .lightbox-info {
+      flex: 1.4;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      color: #f5ebdb;
+    }
+
+    .lb-section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .lb-title {
+      font-size: 1rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .lb-subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .lb-body {
+      font-size: 0.9rem;
+      line-height: 1.55;
+      color: #e0d5c4;
+      white-space: pre-wrap;
+    }
+
+    .lb-nav {
+      margin-top: 0.7rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .lb-buttons {
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    .lb-btn {
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(10,10,16,0.7);
+      color: #f5f0e6;
+      padding: 0.35rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      min-width: 2.1rem;
+      text-align: center;
+    }
+
+    .lb-btn:hover {
+      background: rgba(40,40,60,0.9);
+    }
+
+    .lb-close {
+      position: fixed;
+      top: 0.8rem;
+      right: 1rem;
+      font-size: 1.3rem;
+      cursor: pointer;
+      color: var(--muted);
+      padding: 0.2rem 0.4rem;
+    }
+
+    .lb-close:hover {
+      color: #ffffff;
+    }
+
+    @media (max-width: 900px) {
+      .lightbox-inner {
+        flex-direction: column;
+        max-height: 100vh;
+        overflow-y: auto;
+      }
+      .lightbox-info {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page { padding-inline: 0.9rem; }
+      .thumb-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+    }
+
+    footer {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0.7rem 1.1rem 0.7rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="breadcrumbs">
+        <a href="/">1447</a> &nbsp;/&nbsp; <a href="/twarze/">Twarze</a> &nbsp;/&nbsp; <span id="crumb-title">Galeria</span>
+      </div>
+      <div class="title-group">
+        <h1 id="gallery-title">Galeria</h1>
+        <p class="subtitle" id="gallery-subtitle">
+          Kliknij twarz, by obejrzeć ją na całą wysokość ekranu i przeczytać notatkę.
+        </p>
+      </div>
+    </header>
+
+    <main>
+      <p class="note">
+        Podpisy i teksty do poszczególnych portretów wczytywane są z plików .txt o tej samej nazwie co plik graficzny (w tym samym folderze).
+      </p>
+      <div id="thumb-grid" class="thumb-grid">
+        <!-- miniatury z images.txt -->
+      </div>
+    </main>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox">
+    <div class="lb-close" id="lb-close" aria-label="Zamknij">&times;</div>
+    <div class="lightbox-inner">
+      <div class="lightbox-image-wrap">
+        <img id="lb-image" src="" alt="">
+      </div>
+      <aside class="lightbox-info">
+        <div class="lb-section-label">Twarze · sekcja</div>
+        <div id="lb-title" class="lb-title"></div>
+        <div id="lb-subtitle" class="lb-subtitle"></div>
+        <div id="lb-body" class="lb-body"></div>
+        <div class="lb-nav">
+          <div>Strzałki ← → przełączają twarze</div>
+          <div class="lb-buttons">
+            <button type="button" class="lb-btn" id="lb-prev">&larr;</button>
+            <button type="button" class="lb-btn" id="lb-next">&rarr;</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <footer>
+    1447 · Twarze – galeria · widok pełnoekranowy portretu
+  </footer>
+
+  <script>
+    const images = [];
+    let currentIndex = 0;
+
+    function getSectionIdFromPath() {
+      const parts = window.location.pathname.split('/').filter(Boolean);
+      // .../twarze/1/ -> ostatni element to "1"
+      return parts[parts.length - 1] || '1';
+    }
+
+    // Ustawienie tytułu i okruszków na podstawie twarze-sections.txt
+    async function loadSectionMeta() {
+      const id = getSectionIdFromPath();
+      try {
+        const res = await fetch('/content/twarze-sections.txt');
+        if (!res.ok) return;
+        const text = await res.text();
+        const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+
+        for (const line of lines) {
+          const parts = line.split('|');
+          const lineId = (parts[0] || '').trim();
+          const title = (parts[1] || '').trim();
+          const desc  = (parts[2] || '').trim();
+          if (lineId === id) {
+            if (title) {
+              document.getElementById('gallery-title').textContent = title;
+              document.getElementById('crumb-title').textContent = title;
+            }
+            if (desc) {
+              document.getElementById('gallery-subtitle').textContent = desc;
+            }
+            break;
+          }
+        }
+      } catch (e) {}
+    }
+
+    async function loadImages() {
+      try {
+        const res = await fetch('images.txt');
+        if (!res.ok) return;
+        const text = await res.text();
+        const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+        const grid = document.getElementById('thumb-grid');
+
+        lines.forEach((fileName, idx) => {
+          images.push(fileName);
+
+          const figure = document.createElement('figure');
+          figure.className = 'thumb';
+          figure.dataset.index = idx.toString();
+
+          const img = document.createElement('img');
+          img.src = encodeURI(fileName);
+          img.alt = fileName;
+
+          const caption = document.createElement('figcaption');
+          caption.className = 'thumb-caption';
+          caption.textContent = fileName.replace(/\.[^.]+$/, '');
+
+          figure.appendChild(img);
+          figure.appendChild(caption);
+          grid.appendChild(figure);
+
+          figure.addEventListener('click', () => openLightbox(idx));
+        });
+      } catch (e) {}
+    }
+
+    function openLightbox(index) {
+      currentIndex = index;
+      updateLightbox();
+      document.getElementById('lightbox').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function showNext(delta) {
+      if (!images.length) return;
+      currentIndex = (currentIndex + delta + images.length) % images.length;
+      updateLightbox();
+    }
+
+    async function updateLightbox() {
+      const fileName = images[currentIndex];
+      const imgEl = document.getElementById('lb-image');
+      imgEl.src = encodeURI(fileName);
+      imgEl.alt = fileName;
+
+      // domyślny tytuł – nazwa pliku bez rozszerzenia
+      const baseName = fileName.replace(/\.[^.]+$/, '');
+      let shortTitle = baseName;
+      let heading = '';
+      let body = '';
+
+      // próbujemy wczytać plik TXT o tej samej nazwie
+      const txtName = baseName + '.txt';
+
+      try {
+        const res = await fetch(encodeURI(txtName));
+        if (res.ok) {
+          const text = await res.text();
+          const lines = text.split(/\r?\n/);
+          shortTitle = (lines[0] || baseName).trim();
+          heading = (lines[1] || '').trim();
+          body = lines.slice(2).join('\n').trim();
+        }
+      } catch (e) {
+        // brak TXT – zostawiamy domyślne
+      }
+
+      document.getElementById('lb-title').textContent = shortTitle;
+      document.getElementById('lb-subtitle').textContent = heading;
+      document.getElementById('lb-body').textContent = body || '';
+    }
+
+    // obsługa przycisków i klawiatury
+    document.getElementById('lb-close').addEventListener('click', closeLightbox);
+    document.getElementById('lb-prev').addEventListener('click', () => showNext(-1));
+    document.getElementById('lb-next').addEventListener('click', () => showNext(1));
+
+    document.addEventListener('keydown', (e) => {
+      const lb = document.getElementById('lightbox');
+      if (!lb.classList.contains('active')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') showNext(-1);
+      if (e.key === 'ArrowRight') showNext(1);
+    });
+
+    // start
+    loadSectionMeta();
+    loadImages();
+  </script>
+</body>
+</html>
