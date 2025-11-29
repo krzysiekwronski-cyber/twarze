@@ -24,7 +24,6 @@
       --fg: #f5f0e6;
       --muted: #a19b8b;
       --accent: #a01020;
-      --accent-soft: rgba(160, 16, 32, 0.4);
       --border: #272435;
       --shadow-soft: 0 18px 40px rgba(0,0,0,0.9);
     }
@@ -46,12 +45,12 @@
       flex: 1;
       display: flex;
       flex-direction: column;
+      gap: 2rem;
     }
 
     header {
       padding: 0.5rem 0 1.5rem;
       border-bottom: 1px solid rgba(255,255,255,0.04);
-      margin-bottom: 2rem;
     }
 
     .logo-line {
@@ -85,23 +84,8 @@
       color: #f1e6d6;
     }
 
-    .logo-tagline-sub {
-      font-size: 0.95rem;
-      max-width: 420px;
-      color: var(--muted);
-      line-height: 1.4;
-    }
-
-    .subheading {
-      margin-top: 1.1rem;
-      font-size: 0.95rem;
-      color: var(--muted);
-      max-width: 560px;
-    }
-
     main {
       flex: 1;
-      padding-top: 1.5rem;
       display: flex;
       flex-direction: column;
       gap: 2rem;
@@ -132,7 +116,14 @@
     .home-intro-body {
       font-size: 0.95rem;
       color: #d3c9b8;
-      line-height: 1.5;
+      line-height: 1.6;
+      text-align: justify;
+    }
+
+    .sections-block {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
 
     .section-title {
@@ -140,7 +131,7 @@
       text-transform: uppercase;
       letter-spacing: 0.15em;
       color: var(--muted);
-      margin-bottom: 0.9rem;
+      margin-bottom: 0.2rem;
     }
 
     .section-title::before {
@@ -178,16 +169,6 @@
       min-height: 220px;
     }
 
-    .section-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at top left, rgba(255,255,255,0.04), transparent 60%);
-      opacity: 0;
-      transition: opacity 0.2s ease;
-      pointer-events: none;
-    }
-
     .section-card:hover {
       transform: translateY(-4px);
       box-shadow: 0 26px 60px rgba(0,0,0,1);
@@ -195,13 +176,9 @@
       background: radial-gradient(circle at top, #31263c 0, #131320 48%, #090712 100%);
     }
 
-    .section-card:hover::before {
-      opacity: 1;
-    }
-
     .section-thumb {
       position: relative;
-      height: 150px;
+      height: 220px; /* większe pole, żeby było widać więcej z portretu */
       overflow: hidden;
       background: radial-gradient(circle at center, #201826, #090712 70%);
       display: flex;
@@ -224,19 +201,15 @@
       filter: grayscale(0) contrast(1.16);
     }
 
-    .section-thumb.placeholder {
-      border-bottom: 1px dashed rgba(255,255,255,0.08);
-      color: var(--muted);
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
+    .section-thumb.empty {
+      border-bottom: 1px solid rgba(255,255,255,0.08);
     }
 
     .section-body {
-      padding: 0.85rem 0.95rem 1rem;
+      padding: 0.75rem 0.95rem 0.9rem;
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;
+      justify-content: center;
       flex: 1;
     }
 
@@ -245,29 +218,7 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: #f5ebdb;
-    }
-
-    .section-desc {
-      font-size: 0.9rem;
-      color: #cbc2b2;
-      line-height: 1.4;
-    }
-
-    .section-meta {
-      margin-top: auto;
-      font-size: 0.78rem;
-      color: #9e8f7d;
-      opacity: 0.85;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .badge {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--muted);
+      text-align: center;
     }
 
     footer {
@@ -290,14 +241,14 @@
         align-items: flex-start;
         gap: 0.4rem;
       }
-      .logo-tagline-sub {
-        max-width: 100%;
-      }
       .sections-grid {
         grid-template-columns: minmax(0, 1fr);
       }
       .home-intro {
         padding: 0.9rem 0.85rem 1rem;
+      }
+      .section-card {
+        min-height: 220px;
       }
     }
   </style>
@@ -309,14 +260,8 @@
         <div class="logo-year">1447</div>
         <div class="logo-tagline">
           <div class="logo-tagline-main">Żmije i Pawęże</div>
-          <div class="logo-tagline-sub">
-            Portrety ludzi, którzy mogli się minąć w roku 1447 – na dworach, w miastach, w kronikach i na marginesach.
-          </div>
         </div>
       </div>
-      <p class="subheading">
-        To nie jest muzeum online. To szkicownik twarzy, tropów i podejrzeń – rozwijany projekt badawczy i wizualny.
-      </p>
     </header>
 
     <main>
@@ -326,110 +271,56 @@
         <div id="home-intro-body" class="home-intro-body"></div>
       </section>
 
-      <section>
+      <section class="sections-block">
         <h2 class="section-title">Działy</h2>
         <div class="sections-grid">
           <!-- Twarze -->
-          <a class="section-link" href="/twarze/">
+          <a class="section-link" href="twarze/">
             <article class="section-card">
-              <div class="section-thumb" id="thumb-twarze">
-                <span>brak miniatury</span>
-              </div>
+              <div class="section-thumb" id="thumb-twarze"></div>
               <div class="section-body">
                 <div class="section-name">Twarze</div>
-                <div class="section-desc">
-                  Portrety ludzi, którzy mogliby mijać się wzrokiem w roku 1447 – nawet jeśli powstali daleko od Krakowa.
-                </div>
-                <div class="section-meta">
-                  <span class="badge">sekcja aktywna</span>
-                  <span>→ wejdź</span>
-                </div>
               </div>
             </article>
           </a>
 
           <!-- Moda -->
           <article class="section-card">
-            <div class="section-thumb placeholder">
-              <span>brak materiału</span>
-            </div>
+            <div class="section-thumb empty"></div>
             <div class="section-body">
               <div class="section-name">Moda</div>
-              <div class="section-desc">
-                Strój jako znak czasu. Kiedy pojawią się pierwsze sylwetki, zobaczysz je tutaj.
-              </div>
-              <div class="section-meta">
-                <span class="badge">w przygotowaniu</span>
-                <span> </span>
-              </div>
             </div>
           </article>
 
           <!-- Mapy -->
           <article class="section-card">
-            <div class="section-thumb placeholder">
-              <span>brak materiału</span>
-            </div>
+            <div class="section-thumb empty"></div>
             <div class="section-body">
               <div class="section-name">Mapy</div>
-              <div class="section-desc">
-                Miejsca, które wtedy istniały, zmieniały nazwy albo zniknęły – na mapach i poza nimi.
-              </div>
-              <div class="section-meta">
-                <span class="badge">w przygotowaniu</span>
-                <span> </span>
-              </div>
             </div>
           </article>
 
           <!-- Konstrukcje -->
           <article class="section-card">
-            <div class="section-thumb placeholder">
-              <span>brak materiału</span>
-            </div>
+            <div class="section-thumb empty"></div>
             <div class="section-body">
               <div class="section-name">Konstrukcje</div>
-              <div class="section-desc">
-                Budowle, miasta, mosty i wszystko to, co stanowiło scenografię roku 1447.
-              </div>
-              <div class="section-meta">
-                <span class="badge">w przygotowaniu</span>
-                <span> </span>
-              </div>
             </div>
           </article>
 
           <!-- Historia -->
           <article class="section-card">
-            <div class="section-thumb placeholder">
-              <span>brak materiału</span>
-            </div>
+            <div class="section-thumb empty"></div>
             <div class="section-body">
               <div class="section-name">Historia</div>
-              <div class="section-desc">
-                Wydarzenia, które przechodzą przez tę datę – i takie, które milkną tuż przed nią.
-              </div>
-              <div class="section-meta">
-                <span class="badge">w przygotowaniu</span>
-                <span> </span>
-              </div>
             </div>
           </article>
 
           <!-- Inne -->
           <article class="section-card">
-            <div class="section-thumb placeholder">
-              <span>brak materiału</span>
-            </div>
+            <div class="section-thumb empty"></div>
             <div class="section-body">
               <div class="section-name">Inne</div>
-              <div class="section-desc">
-                Rzeczy, dla których nie ma jeszcze osobnego działu, ale nie mieszczą się w przypisie.
-              </div>
-              <div class="section-meta">
-                <span class="badge">w przygotowaniu</span>
-                <span> </span>
-              </div>
             </div>
           </article>
         </div>
@@ -438,14 +329,14 @@
   </div>
 
   <footer>
-    1447 · Żmije i Pawęże – robocza wersja strony · statyczna www na GitHub Pages
+    1447 · Żmije i Pawęże – robocza wersja strony
   </footer>
 
   <script>
     // Ładowanie intro SG z content/home-intro.txt
     async function loadHomeIntro() {
       try {
-        const res = await fetch('/content/home-intro.txt');
+        const res = await fetch('content/home-intro.txt');
         if (!res.ok) return;
         const text = await res.text();
         const lines = text.split(/\r?\n/);
@@ -466,11 +357,11 @@
       }
     }
 
-    // Ładowanie miniatury dla sekcji "Twarze" z /twarze/1/images.txt
+    // Ładowanie miniatury dla sekcji "Twarze" z twarze/1/images.txt
     async function loadTwarzeThumb() {
       const thumbEl = document.getElementById('thumb-twarze');
       try {
-        const res = await fetch('/twarze/1/images.txt');
+        const res = await fetch('twarze/1/images.txt');
         if (!res.ok) return;
         const text = await res.text();
         const lines = text.split(/\r?\n/).map(l => l.trim());
@@ -478,15 +369,15 @@
         if (!firstFile) return;
 
         const img = document.createElement('img');
-        img.src = encodeURI('/twarze/1/' + firstFile);
+        img.src = 'twarze/1/' + firstFile;
         img.alt = 'Twarze – miniatura';
         img.loading = 'lazy';
 
         thumbEl.innerHTML = '';
-        thumbEl.classList.remove('placeholder');
+        thumbEl.classList.remove('empty');
         thumbEl.appendChild(img);
       } catch (e) {
-        // jak nie ma pliku, zostaje placeholder
+        // jak nie ma pliku, zostaje pusty prostokąt
       }
     }
 
@@ -495,6 +386,8 @@
   </script>
 </body>
 </html>
+
+
 
 
 
