@@ -72,25 +72,18 @@
       text-transform: uppercase;
     }
 
-    .subtitle {
-      font-size: 0.95rem;
-      color: var(--muted);
-      max-width: 540px;
-      line-height: 1.45;
-    }
-
     main {
-      display: flex;
-      flex-direction: column;
-      gap: 1.8rem;
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.3fr);
+      gap: 2rem;
+      align-items: flex-start;
     }
 
     .intro-box {
       background: radial-gradient(circle at top left, rgba(255,255,255,0.03), transparent 60%);
       border-radius: 14px;
-      padding: 1rem 1.1rem 1.1rem;
+      padding: 1.1rem 1.2rem 1.3rem;
       border: 1px solid rgba(255,255,255,0.06);
-      max-width: 860px;
     }
 
     .intro-h1 {
@@ -104,37 +97,33 @@
     .intro-h2 {
       font-size: 0.92rem;
       color: var(--muted);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
     }
 
     .intro-body {
       font-size: 0.95rem;
       color: #d3c9b8;
-      line-height: 1.6;
+      line-height: 1.75;
+      text-align: justify;
+    }
+
+    .right-column {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
     }
 
     .sections-title {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       text-transform: uppercase;
       letter-spacing: 0.15em;
       color: var(--muted);
-      margin-bottom: 0.7rem;
-    }
-
-    .sections-title::before {
-      content: "";
-      display: inline-block;
-      width: 32px;
-      height: 1px;
-      background: linear-gradient(to right, var(--accent), transparent);
-      margin-right: 0.75rem;
-      transform: translateY(-0.2em);
     }
 
     .sections-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 1.4rem;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1rem;
     }
 
     .section-link {
@@ -150,7 +139,7 @@
       box-shadow: var(--shadow-soft);
       display: flex;
       flex-direction: column;
-      min-height: 210px;
+      min-height: 260px;
       cursor: pointer;
       transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
     }
@@ -163,7 +152,7 @@
 
     .section-thumb {
       position: relative;
-      height: 140px;
+      height: 220px; /* wyższe pole na miniaturę, żeby było widać więcej portretu */
       background: radial-gradient(circle at center, #201826, #090712 70%);
       display: flex;
       align-items: center;
@@ -177,62 +166,35 @@
       object-fit: cover;
       display: block;
       filter: grayscale(0.25) contrast(1.08);
-      transform: scale(1.04);
+      transform: scale(1.02);
       transition: transform 0.35s ease, filter 0.35s ease;
     }
 
     .section-card:hover .section-thumb img {
-      transform: scale(1.08);
+      transform: scale(1.06);
       filter: grayscale(0) contrast(1.16);
     }
 
-    .section-thumb.placeholder {
-      border-bottom: 1px dashed rgba(255,255,255,0.08);
-      color: var(--muted);
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-    }
-
-    .thumb-label {
-      opacity: 0.85;
-    }
-
     .section-body {
-      padding: 0.8rem 0.95rem 1rem;
+      padding: 0.75rem 0.95rem 0.9rem;
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;
-      flex: 1;
+      gap: 0.25rem;
+      justify-content: center;
     }
 
     .section-name {
-      font-size: 1rem;
+      font-size: 0.95rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: #f5ebdb;
     }
 
     .section-desc {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #cbc2b2;
-      line-height: 1.4;
-    }
-
-    .section-meta {
-      font-size: 0.78rem;
-      color: #9e8f7d;
-      margin-top: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .badge {
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--muted);
+      margin-top: 0.15rem;
+      line-height: 1.45;
     }
 
     footer {
@@ -246,9 +208,14 @@
       text-align: right;
     }
 
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
     @media (max-width: 720px) {
       .page { padding-inline: 1rem; }
-      .sections-grid { grid-template-columns: minmax(0, 1fr); }
       .intro-box { padding: 0.9rem 0.85rem 1rem; }
     }
   </style>
@@ -257,13 +224,10 @@
   <div class="page">
     <header>
       <div class="breadcrumbs">
-        <a href="/">1447</a> &nbsp;/&nbsp; Twarze
+        <a href="../">1447</a> &nbsp;/&nbsp; Twarze
       </div>
       <div class="title-line">
         <h1>Twarze</h1>
-        <p class="subtitle">
-          Próba zobaczenia roku 1447 przez spojrzenia ludzi, których znamy z kilku centymetrów farby na desce.
-        </p>
       </div>
     </header>
 
@@ -274,24 +238,24 @@
         <div id="intro-body" class="intro-body"></div>
       </section>
 
-      <section>
-        <h2 class="sections-title">Podziały w dziale „Twarze”</h2>
+      <aside class="right-column">
+        <div class="sections-title">Sekcje</div>
         <div id="sections-grid" class="sections-grid">
-          <!-- Karty sekcji wczytywane z twarze-sections.txt -->
+          <!-- wypełniane z twarze-sections.txt -->
         </div>
-      </section>
+      </aside>
     </main>
   </div>
 
   <footer>
-    1447 · Twarze – poziom 2 · sekcje wczytywane z pliku tekstowego
+    1447 · Twarze – poziom 2
   </footer>
 
   <script>
-    // 1) Intro z content/twarze-intro.txt
+    // Intro z content/twarze-intro.txt
     async function loadIntro() {
       try {
-        const res = await fetch('/content/twarze-intro.txt');
+        const res = await fetch('../content/twarze-intro.txt');
         if (!res.ok) return;
         const text = await res.text();
         const lines = text.split(/\r?\n/);
@@ -305,12 +269,12 @@
       } catch (e) {}
     }
 
-    // 2) Sekcje z content/twarze-sections.txt
-    // Format linii: ID|Tytuł|Krótki opis
+    // Sekcje z content/twarze-sections.txt
+    // Format: ID|Tytuł|Krótki opis
     async function loadSections() {
       const grid = document.getElementById('sections-grid');
       try {
-        const res = await fetch('/content/twarze-sections.txt');
+        const res = await fetch('../content/twarze-sections.txt');
         if (!res.ok) return;
         const text = await res.text();
         const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
@@ -320,23 +284,18 @@
           const id = (parts[0] || '').trim();
           const title = (parts[1] || '').trim();
           const desc = (parts[2] || '').trim();
-
           if (!id || !title) continue;
 
           const link = document.createElement('a');
           link.className = 'section-link';
-          link.href = '/twarze/' + encodeURIComponent(id) + '/';
+          link.href = id + '/';
 
           const card = document.createElement('article');
           card.className = 'section-card';
 
           const thumb = document.createElement('div');
-          thumb.className = 'section-thumb placeholder';
+          thumb.className = 'section-thumb';
           thumb.dataset.sectionId = id;
-          const span = document.createElement('span');
-          span.className = 'thumb-label';
-          span.textContent = 'brak miniatury';
-          thumb.appendChild(span);
 
           const bodyEl = document.createElement('div');
           bodyEl.className = 'section-body';
@@ -349,20 +308,8 @@
           descEl.className = 'section-desc';
           descEl.textContent = desc || '';
 
-          const metaEl = document.createElement('div');
-          metaEl.className = 'section-meta';
-          const badge = document.createElement('span');
-          badge.className = 'badge';
-          badge.textContent = 'wejście do galerii';
-          const arrow = document.createElement('span');
-          arrow.textContent = '→';
-
-          metaEl.appendChild(badge);
-          metaEl.appendChild(arrow);
-
           bodyEl.appendChild(nameEl);
           if (desc) bodyEl.appendChild(descEl);
-          bodyEl.appendChild(metaEl);
 
           card.appendChild(thumb);
           card.appendChild(bodyEl);
@@ -370,18 +317,17 @@
           grid.appendChild(link);
         }
 
-        // po stworzeniu kart – spróbujmy wczytać miniatury
         loadSectionThumbs();
       } catch (e) {}
     }
 
-    // 3) Miniatury z twarze/<id>/images.txt (pierwszy plik na liście)
+    // Miniatury sekcji z twarze/<id>/images.txt
     async function loadSectionThumbs() {
-      const thumbs = document.querySelectorAll('.section-thumb.placeholder');
+      const thumbs = document.querySelectorAll('.section-thumb');
       for (const thumb of thumbs) {
         const id = thumb.dataset.sectionId;
         try {
-          const res = await fetch('/twarze/' + encodeURIComponent(id) + '/images.txt');
+          const res = await fetch(id + '/images.txt');
           if (!res.ok) continue;
           const text = await res.text();
           const lines = text.split(/\r?\n/).map(l => l.trim());
@@ -389,16 +335,13 @@
           if (!firstFile) continue;
 
           const img = document.createElement('img');
-          img.src = encodeURI('/twarze/' + id + '/' + firstFile);
+          img.src = id + '/' + firstFile;
           img.alt = 'Miniatura sekcji ' + id;
           img.loading = 'lazy';
 
           thumb.innerHTML = '';
-          thumb.classList.remove('placeholder');
           thumb.appendChild(img);
-        } catch (e) {
-          // brak obrazu = zostaje placeholder
-        }
+        } catch (e) {}
       }
     }
 
